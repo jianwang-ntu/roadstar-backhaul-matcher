@@ -7,9 +7,19 @@ whole experiment:
   naive_nearest        distance only. Ignores C1/C2/C3, so it proposes
                        dispatches a real fleet would have to reject. Its
                        infeasible count is reported, never suppressed.
-  greedy_feasible      the fair baseline: nearest load among those that are
-                       actually legal. This is what a dispatcher with a load
+  greedy_feasible      the DISTANCE baseline: nearest load among those that
+                       are actually legal. This is what a dispatcher with a load
                        board does.
+  greedy_profit_pairwise
+                       the PROFIT baseline: sort every legal pair by the same
+                       contribution the exact solver optimises and take them
+                       greedily. Added after round-1 audit finding D3, which
+                       showed that comparing an exact profit solver only against
+                       a distance-greedy dispatcher credits the solver with the
+                       gain from changing the objective. This baseline isolates
+                       that: greedy_feasible -> greedy_profit_pairwise is the
+                       objective change, greedy_profit_pairwise ->
+                       profit_assignment is what solving it exactly is worth.
   optimal_assignment   global minimum-deadhead assignment over the feasible
                        pairs only, solved exactly.
   profit_assignment    the same exact solver against the objective the operator
@@ -25,7 +35,8 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from .econ import OPERATING_COST_USD_PER_KM, match_value_usd
+from . import econ
+from .econ import match_value_usd
 from .feasibility import is_feasible, leg
 from .instance import deadhead_if_unmatched
 from .models import Assignment, Load, Solution, Truck
@@ -130,7 +141,7 @@ def profit_assignment(trucks: list[Truck], loads: list[Load]) -> Solution:
     values = np.zeros((len(trucks), len(loads)), dtype=float)
     feasible = np.zeros((len(trucks), len(loads)), dtype=bool)
     for i, truck in enumerate(trucks):
-        outside = deadhead_if_unmatched(truck) * OPERATING_COST_USD_PER_KM
+        outside = deadhead_if_unmatched(truck) * econ.OPERATING_COST_USD_PER_KM
         for j, load in enumerate(loads):
             if is_feasible(truck, load):
                 feasible[i, j] = True
@@ -151,6 +162,47 @@ def profit_assignment(trucks: list[Truck], loads: list[Load]) -> Solution:
     rows, cols = linear_sum_assignment(cost)
     out = [_assign(trucks[i], loads[j]) for i, j in zip(rows, cols) if keep[i, j]]
     return Solution("profit_assignment", tuple(out))
+
+
+def greedy_profit_pairwise(trucks: list[Truck], loads: list[Load]) -> Solution:
+    """The profit-greedy baseline: best remaining legal pair, taken repeatedly.
+
+    Scored on exactly the objective `profit_assignment` optimises, so the two
+    differ only in HOW the objective is solved -- greedily here, exactly there.
+    Round-1 audit finding D3: without this row, the exact solver's headline is
+    the sum of two effects (a better objective and an exact solve) reported as
+    one, and the first is available from fifteen lines of code.
+    """
+    if not trucks or not loads:
+        return Solution("greedy_profit_pairwise", ())
+
+    pairs: list[tuple[float, str, str, int, float]] = []
+    for truck in trucks:
+        outside = deadhead_if_unmatched(truck) * econ.OPERATING_COST_USD_PER_KM
+        for load in loads:
+            if not is_feasible(truck, load):
+                continue
+            lg = leg(truck, load)
+            v = match_value_usd(lg.deadhead_km, load, outside)
+            if v > 0:
+                pairs.append((v, truck.truck_id, load.load_id, lg.arrive_min, lg.deadhead_km))
+
+    # Deterministic: value descending, then ids ascending to break every tie.
+    pairs.sort(key=lambda r: (-r[0], r[1], r[2]))
+    used_t: set[str] = set()
+    used_l: set[str] = set()
+    out: list[Assignment] = []
+    for _v, tid, lid, arrive, dh in pairs:
+        if tid in used_t or lid in used_l:
+            continue
+        used_t.add(tid)
+        used_l.add(lid)
+        out.append(Assignment(tid, lid, dh, arrive))
+    out.sort(key=lambda a: a.truck_id)
+    return Solution("greedy_profit_pairwise", tuple(out))
+
+
+POLICIES["greedy_profit_pairwise"] = greedy_profit_pairwise
 
 
 POLICIES["profit_assignment"] = profit_assignment

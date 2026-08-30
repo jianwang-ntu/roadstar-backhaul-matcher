@@ -8,7 +8,7 @@ reproduce any real carrier's book of business.
 
 Why synthetic: the event's own freight/order/trip/truck-spec tables sit behind
 the organiser's participant portal, which requires creating an account. See
-plan.md R-1/R-2. When that access lands, `load_portal_instance` is the seam to
+the README access note. When that access lands, `load_portal_instance` is the seam to
 implement -- nothing else in the codebase needs to change.
 """
 
@@ -107,14 +107,14 @@ def make_instance(
 
 
 def load_portal_instance(path: str) -> tuple[list[Truck], list[Load]]:
-    """Seam for the organiser's provided freight tables (plan.md R-2).
+    """Seam for the organiser's provided freight tables.
 
     Deliberately unimplemented. It raises rather than silently falling back to
     synthetic data, so no run can ever report portal-sourced numbers it did not
     have.
     """
     raise NotImplementedError(
-        "Portal data is behind the participant-account wall (plan.md R-1). "
+        "Portal data is behind the participant-account wall. "
         "No portal dataset has been read; this project reports synthetic "
         "results only."
     )

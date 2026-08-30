@@ -25,35 +25,76 @@ synthetic data, so no run can ever report portal numbers it did not have.
 
 Nothing in this README is claimed as a measurement of a real carrier's fleet.
 
+## The accounting boundary, before the table
+
+Two boundary facts decide how every number below should be read. Both were
+found by an independent adversarial audit of the previous revision of this
+repository, and both are stated here rather than in a footnote.
+
+1. **Hours of service now charges the loaded leg, not just the empty one.**
+   The previous revision checked only the repositioning drive against the 13 h
+   driving / 14 h on-duty ceilings, which cleared **14.0%** of the winning
+   policy's dispatches as legal when a compliant driver could not have run
+   them (worst duty day 23.8 h). Fixing it moved this project's own headline
+   empty fraction from 17.00% to **24.46%** and mean profit from $10,904 to
+   **$8,222**. The numbers below are the corrected ones.
+
+2. **The post-delivery run home is outside the primary boundary.** A truck that
+   takes no backhaul is charged its empty run to domicile; a truck that *does*
+   take one is not charged the empty run home from where it drops the load.
+   That is a single-period truncation and it flatters matching. So the primary
+   empty fractions here are **lower bounds** and the primary profits are
+   **upper bounds**, and the fully symmetric figures — charging every truck a
+   run home — are printed in the same table. Under the symmetric boundary every
+   policy is loss-making and `profit_assignment` is not the best policy;
+   `greedy_profit_pairwise` is. That is reported because it is what the runs
+   did.
+
 ## Results
 
 40 trucks × 50 loads, 30 seeded instances (`make sweep`, `results/sweep_40x50.json`).
 Every policy sees the identical instances and is scored by the identical
 feasibility rules, so the comparison is paired.
 
-| policy | mean deadhead km | empty fraction | mean profit | loads matched | illegal dispatches proposed |
-|---|---:|---:|---:|---:|---:|
-| `naive_nearest` | 5454.1 | 48.00% | $1,109 | 22.4 | **528** |
-| `greedy_feasible` | 2999.9 | 22.67% | $8,886 | 37.4 | 0 |
-| `optimal_assignment` | 2598.2 | 19.60% | $9,762 | 38.8 | 0 |
-| **`profit_assignment`** | **2463.3** | **17.00%** | **$10,904** | 38.2 | 0 |
+| policy | mean deadhead km | empty fraction | mean profit | matched | illegal proposed | empty fraction *incl. run home* | profit *incl. run home* |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `naive_nearest` | 6439.8 | 61.78% | -$1,845 | 19.1 | **627** | 74.17% | −$7,207 |
+| `greedy_feasible` (distance baseline) | 3824.3 | 32.39% | $5,967 | 34.7 | 0 | 61.45% | −$3,861 |
+| `greedy_profit_pairwise` (profit baseline) | 3324.8 | 26.36% | $7,554 | 35.2 | 0 | **56.80%** | **−$2,231** |
+| `optimal_assignment` | 3344.4 | 27.50% | $7,422 | 37.2 | 0 | 59.77% | −$3,372 |
+| **`profit_assignment`** | **3146.3** | **24.46%** | **$8,222** | 36.5 | 0 | 57.47% | −$2,780 |
 
-Paired, per instance:
+Paired, per instance. `mean` is the mean of per-instance ratios (not a ratio of
+means); the spread is given because a mean without one is not a result:
 
-| comparison | metric | mean | wins/ties/losses | worst instance |
-|---|---|---:|---:|---:|
-| `profit_assignment` vs `greedy_feasible` | profit | **+25.86%** | 30 / 0 / 0 | +3.48% |
-| `profit_assignment` vs `optimal_assignment` | profit | **+12.53%** | 30 / 0 / 0 | +1.78% |
-| `optimal_assignment` vs `greedy_feasible` | deadhead | +13.57% | 28 / 0 / **2** | **−11.06%** |
-| `profit_assignment` vs `greedy_feasible` | deadhead | +15.06% | 23 / 0 / **7** | **−18.77%** |
+| comparison | metric | mean | median | sd | wins/ties/losses | worst instance |
+|---|---|---:|---:|---:|---:|---:|
+| `profit_assignment` vs `greedy_profit_pairwise` | profit | **+9.33%** | +8.61% | 4.7 | 30 / 0 / 0 | +3.13% |
+| `greedy_profit_pairwise` vs `greedy_feasible` | profit | +35.90% | +23.45% | 43.4 | 27 / 0 / **3** | **−5.50%** |
+| `profit_assignment` vs `greedy_feasible` | profit | +48.16% | +35.07% | 46.1 | 30 / 0 / 0 | +4.73% |
+| `profit_assignment` vs `optimal_assignment` | profit | +11.90% | +8.68% | 9.2 | 29 / **1** / 0 | 0.00% |
+| `optimal_assignment` vs `greedy_feasible` | deadhead | +11.79% | +13.61% | 12.5 | 24 / 0 / **6** | **−11.00%** |
+| `profit_assignment` vs `greedy_feasible` | deadhead | +16.21% | +14.67% | 15.5 | 27 / 0 / **3** | **−10.88%** |
 
-At 100 × 120 over 10 instances the profit gain over `greedy_feasible` is
-+17.04% (10/0/0); one sweep of 10 instances runs in 1.1 s.
+**Read the first two rows together, not the third alone.** The +48.16% against
+a distance-greedy dispatcher is two separate effects added up: changing the
+objective from distance to contribution (+35.90%, and a ~15-line greedy gets
+it), and then solving that objective exactly instead of greedily (**+9.33%**).
+The exact solver's own contribution is the second number. Reporting only the
++48.16% would credit an assignment solver with a gain that mostly comes from
+scoring the right thing.
 
-**The losses in that table are real and are not footnotes.** Minimising
-deadhead is not the same as maximising contribution, and the two policies that
-optimise deadhead are beaten on individual instances. That is reported here
-because it is what the runs did.
+At 100 × 120 over 10 instances: `profit_assignment` 14.77% empty fraction and
+$25,606 mean profit, **+6.13%** over `greedy_profit_pairwise` (10/0/0) and
++27.28% over `greedy_feasible`. One sweep of 10 instances runs in ~1 s.
+
+**Where the empty-fraction improvement comes from.** The empty fraction is a
+ratio, and `profit_assignment` lowers it partly by hauling *more loaded
+kilometres* — it matches 36.5 trucks against `greedy_feasible`'s 34.7, which
+grows the denominator. Deadhead kilometres themselves fall from 3824.3 to
+3146.3 (−17.7%); the rest of the ratio movement is denominator growth. Both
+absolute deadhead and profit are in the table so the ratio cannot be read
+alone.
 
 ## The three things that make this more than a nearest-load lookup
 
@@ -75,21 +116,25 @@ v_ij = revenue_j − cost_per_km × (deadhead_ij + loaded_km_j) + cost_per_km ×
 so it can correctly **decline** a load that is worth less than sending the truck
 home. It is the only policy here that can.
 
-**3. Exact, not heuristic.** The assignment is solved exactly
-(Jonker–Volgenant via `scipy.optimize.linear_sum_assignment`), and the
-optimality is checked against brute-force enumeration of every assignment on
-small instances — an independent oracle, not a restatement of the solver's own
-answer. That test caught a real bug: the first implementation used a large
-penalty cost for unprofitable pairs, which still forces the solver to fill every
-row of the permutation, and forcing a truck that ought to go home onto some load
-displaces a second truck from its best load. Scoring non-options at exactly 0
-fixed it. The test fails against the old formulation.
+**3. Exact, not heuristic — and measured against a heuristic that optimises the
+same thing.** The assignment is solved exactly (Jonker–Volgenant via
+`scipy.optimize.linear_sum_assignment`). Optimality is checked against
+brute-force enumeration on small instances, and the oracle derives the matching
+*cardinality* itself rather than accepting the solver's — an earlier version
+took the cardinality from the solver, which let a mutant matching one load pass
+the entire suite. The rejected big-M formulation is kept executable in
+`tests/test_policies.py::test_big_m_formulation_is_rejected_by_the_oracle`, so
+"the oracle catches it" is a test that runs, not a sentence in this file. It
+discriminates on seeds in 800–829; at the narrower 800–811 range the previous
+revision used, it did not.
 
 ## Verify it
 
 ```
-make test     # 47 tests
-make sweep    # regenerates results/*.json
+pip install -r requirements.txt
+make test      # 52 tests
+make sweep     # regenerates results/*.json
+make dispatch  # prints the actual truck -> load dispatch for one instance
 ```
 
 The suite covers: haversine against an independent WGS-84 Vincenty solver
@@ -110,9 +155,20 @@ the portal loader raises instead of inventing data.
   70 h/7 day cycle, no 24 h reset, no sleeper-berth split, no US rules once a
   truck crosses at Windsor or Buffalo. Nothing here asserts regulatory
   compliance.
-- **Single period.** One round of matching, not a rolling multi-day plan.
+- **Single period.** One round of matching, not a rolling multi-day plan. The
+  post-delivery empty leg falls outside that boundary; see the accounting note
+  above and the `incl. run home` columns.
+- **A degenerate instance family.** Trucks and load origins are drawn from the
+  same 19 corridor nodes, so a large share of pairs have exactly zero deadhead,
+  and the synthetic rate card ($1.85/km + $120) has no variance across lanes.
+  Both make the matching problem easier than a real book of business. **Not
+  fixed in this revision** and it caps how much the comparisons above can be
+  read as a product claim.
 - **`$1.10/km` operating cost is a stated assumption**, not a measured cost base.
-  Every profit figure scales with it; it is emitted in the results payload.
+  Profit is revenue *minus* cost × km, so it does **not** simply scale with the
+  constant — the constant moves the relative comparisons non-proportionally.
+  `--cost-per-km` re-runs the whole sweep at another value; the sensitivity has
+  **not** been swept and reported here yet.
 - **No integration with the event's provided APIs or datasets** (Samsara, Truck
   Mate, Motive, DAT, Loadlink) — see the access note above. This is judging
   criterion 4 and it is **unmet**.
@@ -126,9 +182,36 @@ roadstar/models.py        typed domain model, trailer compatibility matrix
 roadstar/hos.py           hours-of-service ceilings
 roadstar/econ.py          the one cost constant
 roadstar/feasibility.py   the single definition of a legal dispatch
-roadstar/policies.py      the four policies
+roadstar/policies.py      the five policies
 roadstar/instance.py      seeded synthetic generator + the portal seam
 roadstar/metrics.py       empty-mile and contribution accounting
 roadstar/experiment.py    sweep runner and paired comparison
-tests/                    47 tests
+tests/                    52 tests
+requirements.txt          pinned runtime + test dependencies
+conftest.py               makes `pytest -q` work on a clean checkout
 ```
+
+## What an independent audit found, and what is still open
+
+This repository was audited adversarially by a reviewer holding only the code
+and the organiser's published rules — not the plan, not the build notes. It
+returned MAJOR_REVISION_REQUIRED at 37.3/100 and 15 defects. This revision
+closes D1 (HOS loaded leg), D3 (missing profit baseline), D4 (asymmetric
+deadhead accounting — closed by measuring and publishing the symmetric
+boundary, not by picking the flattering one), D5 (oracle cardinality), D6
+(the big-M claim), D9 (denominator disclosure), D10 (packaging), D11 (dangling
+references), D12 (dispatch output), D13 (repository), D14 (dispersion) and D15
+(a misleading field comment).
+
+Still open, stated rather than closed quietly:
+
+- **D2 — two rule-mandated artifacts are absent.** No 3–5 minute demo video and
+  no slide deck, and the organiser's submission portal has not been opened. Not
+  agent-closable: it needs a human to create the participant account.
+- **D7 — cost-constant sensitivity is not swept.** The flag exists; the sweep
+  has not been run and reported.
+- **D8 — the instance family is degenerate** (zero-deadhead pairs, flat rate
+  card), as described above.
+- **Judging criterion 4 (provided data and APIs, 15% of the score) is unmet**,
+  and criterion 5 (presentation, 15%) is unmet. Both are stated in the
+  organiser's own rubric and neither is claimed here.

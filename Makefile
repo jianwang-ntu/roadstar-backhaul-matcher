@@ -1,7 +1,10 @@
-.PHONY: test demo sweep clean
+.PHONY: test demo dispatch sweep clean
 
 test:
 	python3 -m pytest -q
+
+dispatch:
+	python3 -m roadstar.experiment --trucks 40 --loads 50 --dispatch
 
 demo:
 	python3 -m roadstar.experiment --trucks 40 --loads 50 --instances 30

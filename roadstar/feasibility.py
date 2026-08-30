@@ -6,7 +6,14 @@ rules. Three hard constraints:
 
   C1 trailer compatibility        (models.can_haul)
   C2 pickup time window           truck must arrive by pickup_close_min
-  C3 hours of service             deadhead drive + pickup overhead must fit
+  C3 hours of service             deadhead drive + LOADED drive + pickup
+                                  overhead must all fit inside the duty day
+
+C3 charges the loaded leg as well as the empty repositioning leg. Round-1 audit
+finding D1: charging only the deadhead leg cleared 14.0% of the winning policy's
+dispatches as legal when the driver could not have run them (worst duty day
+23.8 h against a 13 h driving ceiling). A dispatch is only legal if the driver
+can reach the pickup AND deliver the load inside the ceilings.
 """
 
 from __future__ import annotations
@@ -25,6 +32,11 @@ class Leg:
     arrive_min: int
 
 
+def loaded_drive_minutes(load: Load) -> int:
+    """Driving minutes of the loaded leg itself, origin to destination."""
+    return drive_minutes(load.loaded_km)
+
+
 def leg(truck: Truck, load: Load) -> Leg:
     """The empty repositioning leg from where the truck sits to the pickup."""
     km = road_km(truck.at, load.origin)
@@ -40,7 +52,8 @@ def violations(truck: Truck, load: Load) -> tuple[str, ...]:
     lg = leg(truck, load)
     if lg.arrive_min > load.pickup_close_min:
         bad.append("C2_window")
-    if not hos_ok(truck.drive_used_min, truck.onduty_used_min, lg.drive_min):
+    added_drive = lg.drive_min + loaded_drive_minutes(load)
+    if not hos_ok(truck.drive_used_min, truck.onduty_used_min, added_drive):
         bad.append("C3_hos")
     return tuple(bad)
 

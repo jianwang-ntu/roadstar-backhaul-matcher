@@ -1,0 +1,4 @@
+# Pinned to the versions this project's reported numbers were produced under.
+numpy>=1.26,<3
+scipy>=1.11,<2
+pytest>=7.4

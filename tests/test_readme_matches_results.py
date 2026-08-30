@@ -62,7 +62,9 @@ def test_paired_comparison_percentages_match_results(data, readme):
     for line in readme.splitlines():
         m = re.match(
             r"\|\s*`?(\w+)`?\s*vs\s*`?(\w+)`?\s*\|\s*(profit|deadhead)\s*\|\s*"
-            r"\*{0,2}([+-][\d.]+)%\*{0,2}\s*\|\s*(\d+)\s*/\s*(\d+)\s*/\s*\*{0,2}(\d+)\*{0,2}\s*\|",
+            r"\*{0,2}([+\-\u2212][\d.]+)%\*{0,2}\s*\|"          # mean
+            r"[^|]*\|[^|]*\|"                                        # median, sd
+            r"\s*(\d+)\s*/\s*\*{0,2}(\d+)\*{0,2}\s*/\s*\*{0,2}(\d+)\*{0,2}\s*\|",
             line.replace("`", "").strip(),
         )
         if not m:
@@ -71,10 +73,11 @@ def test_paired_comparison_percentages_match_results(data, readme):
         key = (treat, base, "profit_usd" if metric == "profit" else "deadhead_km")
         assert key in by_pair, key
         c = by_pair[key]
-        assert float(pct) == pytest.approx(c["mean_rel_improvement_pct"], abs=0.02), key
+        assert float(pct.replace("\u2212", "-")) == pytest.approx(
+            c["mean_rel_improvement_pct"], abs=0.02), key
         assert (int(w), int(t), int(l)) == (c["n_wins"], c["n_ties"], c["n_losses"]), key
         checked += 1
-    assert checked == 4, f"expected 4 comparison rows, parsed {checked}"
+    assert checked == 6, f"expected 6 comparison rows, parsed {checked}"
 
 
 def _flat(text: str) -> str:
@@ -95,6 +98,21 @@ def test_readme_declares_unmet_criteria(readme):
     flat = _flat(readme)
     assert "it is unmet" in flat
     assert "No demo video or slide deck yet" in flat
+    assert "criterion 4 (provided data and APIs, 15% of the score) is unmet" in flat
+
+
+def test_readme_states_the_accounting_boundary_and_its_direction(readme):
+    """D4: the primary figures are one side of a truncation. The README must say
+    which side, and must not omit that the symmetric view reverses the ranking."""
+    flat = _flat(readme)
+    assert "lower bounds" in flat and "upper bounds" in flat
+    assert "`profit_assignment` is not the best policy" in flat
+
+
+def test_readme_separates_the_objective_change_from_the_exact_solve(readme):
+    """D3: the headline against the distance baseline must not stand alone."""
+    flat = _flat(readme)
+    assert "+9.33%" in flat and "+35.90%" in flat and "+48.16%" in flat
 
 
 def test_readme_test_count_matches_the_suite(readme):

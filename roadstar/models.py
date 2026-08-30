@@ -47,7 +47,11 @@ class Truck:
     drive_used_min: int
     #: Minutes of on-duty time already used in the current duty day.
     onduty_used_min: int
-    #: Domicile, used only for reporting; not a constraint.
+    #: Domicile. NOT a feasibility constraint, but it DRIVES THE OBJECTIVE:
+    #: the empty run home is the truck's outside option, so it prices every
+    #: candidate match in econ.match_value_usd and is charged as deadhead in
+    #: metrics.score. Round-1 audit finding D15 -- the old comment said
+    #: 'report-only', which understated its role.
     domicile_name: str
 
 

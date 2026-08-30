@@ -15,9 +15,11 @@ import pytest
 from roadstar.econ import OPERATING_COST_USD_PER_KM, match_value_usd
 from roadstar.feasibility import is_feasible, leg
 from roadstar.instance import deadhead_if_unmatched, make_instance
+from roadstar.models import Assignment, Solution
 from roadstar.policies import (
     POLICIES,
     greedy_feasible,
+    greedy_profit_pairwise,
     naive_nearest,
     optimal_assignment,
     profit_assignment,
@@ -79,16 +81,44 @@ def _brute_force_min_deadhead(trucks, loads):
     return best
 
 
+def _brute_force_max_cardinality(trucks, loads) -> int:
+    """Largest number of loads any legal pairing can cover. Oracle, not solver."""
+    best = 0
+    for k in range(len(trucks), 0, -1):
+        if k <= best:
+            break
+        for tsub in itertools.combinations(range(len(trucks)), k):
+            for lperm in itertools.permutations(range(len(loads)), k):
+                if all(is_feasible(trucks[i], loads[j]) for i, j in zip(tsub, lperm)):
+                    best = max(best, k)
+                    break
+            if best == k:
+                break
+    return best
+
+
 def test_optimal_assignment_matches_brute_force_on_small_instances():
+    """Cardinality FIRST, then cost at that cardinality.
+
+    Round-1 audit finding D5: the previous version enumerated only over
+    combinations of size len(sol.assignments) -- the solver supplied the
+    cardinality the oracle then checked against, so a mutant returning the
+    single cheapest legal pair passed the whole suite while the sweep collapsed
+    to mean_matched 1.0. The oracle now derives the cardinality itself.
+    """
     for seed in range(700, 712):
         trucks, loads = make_instance(4, 4, seed=seed)
         sol = optimal_assignment(trucks, loads)
         got = sum(a.deadhead_km for a in sol.assignments)
-        # The solver maximises cardinality first (every feasible row is filled),
-        # so compare against brute force restricted to the same cardinality.
+
+        max_card = _brute_force_max_cardinality(trucks, loads)
+        assert len(sol.assignments) == max_card, (
+            f"seed {seed}: matched {len(sol.assignments)}, oracle says {max_card}"
+        )
+
         best = None
-        for tsub in itertools.combinations(range(len(trucks)), len(sol.assignments)):
-            for lperm in itertools.permutations(range(len(loads)), len(sol.assignments)):
+        for tsub in itertools.combinations(range(len(trucks)), max_card):
+            for lperm in itertools.permutations(range(len(loads)), max_card):
                 if all(is_feasible(trucks[i], loads[j]) for i, j in zip(tsub, lperm)):
                     tot = sum(leg(trucks[i], loads[j]).deadhead_km for i, j in zip(tsub, lperm))
                     best = tot if best is None else min(best, tot)
@@ -97,7 +127,14 @@ def test_optimal_assignment_matches_brute_force_on_small_instances():
 
 
 def test_profit_assignment_maximises_its_stated_objective_by_brute_force():
-    for seed in range(800, 812):
+    """Round-1 audit finding D6: at seeds 800-811 the big-M formulation this
+    test is claimed to catch passed it. The auditor's own brute force over
+    seeds 800-829 found 8 of 120 instances where big-M is suboptimal, seed 818
+    among them, so the range is widened to actually discriminate. See
+    tests/test_policies.py::test_big_m_formulation_is_rejected_by_the_oracle,
+    which executes the rejected formulation and asserts the oracle rejects it.
+    """
+    for seed in range(800, 830):
         trucks, loads = make_instance(4, 4, seed=seed)
         outside = {t.truck_id: deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
                    for t in trucks}
@@ -149,3 +186,79 @@ def test_empty_inputs_are_handled_by_every_policy():
         assert fn([], loads).assignments == ()
         assert fn(trucks, []).assignments == ()
         assert fn([], []).assignments == ()
+
+
+def _profit_assignment_big_m(trucks, loads):
+    """The formulation this project REJECTED, kept executable so the claim that
+    the oracle catches it is a measured fact rather than a README assertion."""
+    import numpy as np
+    from scipy.optimize import linear_sum_assignment
+
+    if not trucks or not loads:
+        return Solution("profit_assignment_big_m", ())
+    values = np.zeros((len(trucks), len(loads)), dtype=float)
+    feas = np.zeros((len(trucks), len(loads)), dtype=bool)
+    for i, t in enumerate(trucks):
+        outside = deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
+        for j, ld in enumerate(loads):
+            if is_feasible(t, ld):
+                feas[i, j] = True
+                values[i, j] = match_value_usd(leg(t, ld).deadhead_km, ld, outside)
+    keep = feas & (values > 0)
+    cost = np.where(keep, -values, 1e9)  # <-- the defect
+    rows, cols = linear_sum_assignment(cost)
+    out = [
+        Assignment(trucks[i].truck_id, loads[j].load_id,
+                   leg(trucks[i], loads[j]).deadhead_km, leg(trucks[i], loads[j]).arrive_min)
+        for i, j in zip(rows, cols) if keep[i, j]
+    ]
+    return Solution("profit_assignment_big_m", tuple(out))
+
+
+def test_big_m_formulation_is_rejected_by_the_oracle():
+    """The shipped formulation beats the rejected one on at least one seed in
+    the range the oracle test now covers, and never loses to it."""
+    strictly_better_somewhere = False
+    for seed in range(800, 830):
+        trucks, loads = make_instance(4, 4, seed=seed)
+        outside = {t.truck_id: deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
+                   for t in trucks}
+        by_t = {t.truck_id: i for i, t in enumerate(trucks)}
+        by_l = {ld.load_id: j for j, ld in enumerate(loads)}
+
+        def total(sol):
+            return sum(
+                match_value_usd(leg(trucks[by_t[a.truck_id]], loads[by_l[a.load_id]]).deadhead_km,
+                                loads[by_l[a.load_id]], outside[a.truck_id])
+                for a in sol.assignments
+            )
+
+        shipped = total(profit_assignment(trucks, loads))
+        rejected = total(_profit_assignment_big_m(trucks, loads))
+        assert shipped >= rejected - 1e-9, seed
+        if shipped > rejected + 1e-9:
+            strictly_better_somewhere = True
+    assert strictly_better_somewhere, (
+        "no seed in 800-829 discriminates the two formulations; the README claim "
+        "that the oracle catches big-M would be unsupported"
+    )
+
+
+def test_greedy_profit_pairwise_never_beats_the_exact_solver_on_their_shared_objective():
+    """D3's new baseline optimises the SAME objective, heuristically. If it ever
+    beat the exact solver, the exact solver would not be exact."""
+    for seed in range(760, 772):
+        trucks, loads = make_instance(6, 6, seed=seed)
+        outside = {t.truck_id: deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
+                   for t in trucks}
+        by_t = {t.truck_id: i for i, t in enumerate(trucks)}
+        by_l = {ld.load_id: j for j, ld in enumerate(loads)}
+
+        def total(sol):
+            return sum(
+                match_value_usd(leg(trucks[by_t[a.truck_id]], loads[by_l[a.load_id]]).deadhead_km,
+                                loads[by_l[a.load_id]], outside[a.truck_id])
+                for a in sol.assignments
+            )
+
+        assert total(greedy_profit_pairwise(trucks, loads)) <= total(profit_assignment(trucks, loads)) + 1e-9, seed
