@@ -1,0 +1,116 @@
+{
+  "comparisons": [
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 42.74,
+      "higher_is_better": false,
+      "mean_abs_improvement": 401.736,
+      "mean_baseline": 2999.949,
+      "mean_rel_improvement_pct": 13.566,
+      "mean_treatment": 2598.213,
+      "metric": "deadhead_km",
+      "n_instances": 30,
+      "n_losses": 2,
+      "n_ties": 0,
+      "n_wins": 28,
+      "treatment": "optimal_assignment",
+      "worst_instance_rel_improvement_pct": -11.061
+    },
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 51.225,
+      "higher_is_better": false,
+      "mean_abs_improvement": 536.658,
+      "mean_baseline": 2999.949,
+      "mean_rel_improvement_pct": 15.058,
+      "mean_treatment": 2463.292,
+      "metric": "deadhead_km",
+      "n_instances": 30,
+      "n_losses": 7,
+      "n_ties": 0,
+      "n_wins": 23,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": -18.768
+    },
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 131.675,
+      "higher_is_better": true,
+      "mean_abs_improvement": 2018.429,
+      "mean_baseline": 8885.761,
+      "mean_rel_improvement_pct": 25.86,
+      "mean_treatment": 10904.19,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 0,
+      "n_wins": 30,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": 3.481
+    },
+    {
+      "baseline": "optimal_assignment",
+      "best_instance_rel_improvement_pct": 46.573,
+      "higher_is_better": true,
+      "mean_abs_improvement": 1142.431,
+      "mean_baseline": 9761.759,
+      "mean_rel_improvement_pct": 12.533,
+      "mean_treatment": 10904.19,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 0,
+      "n_wins": 30,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": 1.777
+    }
+  ],
+  "config": {
+    "instances": 30,
+    "loads": 50,
+    "seeds": [
+      1000,
+      1029
+    ],
+    "trucks": 40
+  },
+  "cost_model": {
+    "note": "stated modelling assumption; every profit figure scales with it",
+    "operating_cost_usd_per_km": 1.1
+  },
+  "data_provenance": "SYNTHETIC instances (roadstar.instance.make_instance) over real public corridor coordinates (roadstar.geo.CORRIDOR). No organiser portal data was used; see plan.md R-2.",
+  "per_policy": {
+    "greedy_feasible": {
+      "mean_deadhead_km": 2999.949,
+      "mean_empty_fraction": 0.226726,
+      "mean_matched": 37.367,
+      "mean_profit_usd": 8885.76,
+      "mean_revenue_usd": 23481.56,
+      "total_infeasible_proposed": 0
+    },
+    "naive_nearest": {
+      "mean_deadhead_km": 5454.11,
+      "mean_empty_fraction": 0.480015,
+      "mean_matched": 22.4,
+      "mean_profit_usd": 1109.02,
+      "mean_revenue_usd": 13592.01,
+      "total_infeasible_proposed": 528
+    },
+    "optimal_assignment": {
+      "mean_deadhead_km": 2598.213,
+      "mean_empty_fraction": 0.195957,
+      "mean_matched": 38.8,
+      "mean_profit_usd": 9761.76,
+      "mean_revenue_usd": 24300.04,
+      "total_infeasible_proposed": 0
+    },
+    "profit_assignment": {
+      "mean_deadhead_km": 2463.292,
+      "mean_empty_fraction": 0.170033,
+      "mean_matched": 38.167,
+      "mean_profit_usd": 10904.19,
+      "mean_revenue_usd": 26863.42,
+      "total_infeasible_proposed": 0
+    }
+  }
+}
