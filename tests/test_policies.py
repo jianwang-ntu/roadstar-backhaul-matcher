@@ -127,15 +127,19 @@ def test_optimal_assignment_matches_brute_force_on_small_instances():
 
 
 def test_profit_assignment_maximises_its_stated_objective_by_brute_force():
-    """Round-1 audit finding D6: at seeds 800-811 the big-M formulation this
-    test is claimed to catch passed it. The auditor's own brute force over
-    seeds 800-829 found 8 of 120 instances where big-M is suboptimal, seed 818
-    among them, so the range is widened to actually discriminate. See
+    """Round-1 audit finding D6: the range this test runs over has to be one
+    where the rejected big-M formulation actually loses, or "the oracle catches
+    it" is untested. That is a property of the FEASIBILITY RULE, not a constant:
+    when round-2 finding DOMAIN-01 was fixed and C3 started charging the shipper
+    wait, 4x4 over seeds 800-829 stopped discriminating -- big-M matched the
+    shipped solver on all 30. Re-measured on the rule that now ships, 5x5 over
+    the same seeds discriminates at seeds 825 and 827, so that is the
+    configuration used here and in
     tests/test_policies.py::test_big_m_formulation_is_rejected_by_the_oracle,
     which executes the rejected formulation and asserts the oracle rejects it.
     """
     for seed in range(800, 830):
-        trucks, loads = make_instance(4, 4, seed=seed)
+        trucks, loads = make_instance(5, 5, seed=seed)
         outside = {t.truck_id: deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
                    for t in trucks}
 
@@ -217,10 +221,15 @@ def _profit_assignment_big_m(trucks, loads):
 
 def test_big_m_formulation_is_rejected_by_the_oracle():
     """The shipped formulation beats the rejected one on at least one seed in
-    the range the oracle test now covers, and never loses to it."""
-    strictly_better_somewhere = False
+    the range the oracle test now covers, and never loses to it.
+
+    Same configuration as the brute-force oracle above, and for the same reason:
+    at 4x4 under the corrected C3 the two formulations agree on every seed in
+    this range, so 4x4 would make this assertion vacuous. Measured seeds where
+    the shipped formulation is strictly better at 5x5: 825 and 827."""
+    strictly_better_somewhere = []
     for seed in range(800, 830):
-        trucks, loads = make_instance(4, 4, seed=seed)
+        trucks, loads = make_instance(5, 5, seed=seed)
         outside = {t.truck_id: deadhead_if_unmatched(t) * OPERATING_COST_USD_PER_KM
                    for t in trucks}
         by_t = {t.truck_id: i for i, t in enumerate(trucks)}
@@ -237,10 +246,10 @@ def test_big_m_formulation_is_rejected_by_the_oracle():
         rejected = total(_profit_assignment_big_m(trucks, loads))
         assert shipped >= rejected - 1e-9, seed
         if shipped > rejected + 1e-9:
-            strictly_better_somewhere = True
-    assert strictly_better_somewhere, (
-        "no seed in 800-829 discriminates the two formulations; the README claim "
-        "that the oracle catches big-M would be unsupported"
+            strictly_better_somewhere.append(seed)
+    assert strictly_better_somewhere == [825, 827], (
+        "the discriminating seeds moved. The README states which seeds separate "
+        f"the two formulations; measured now: {strictly_better_somewhere}"
     )
 
 
@@ -262,3 +271,40 @@ def test_greedy_profit_pairwise_never_beats_the_exact_solver_on_their_shared_obj
             )
 
         assert total(greedy_profit_pairwise(trucks, loads)) <= total(profit_assignment(trucks, loads)) + 1e-9, seed
+
+
+def test_both_contribution_scored_policies_can_decline_a_load():
+    """Round-2 audit finding CLAIMS-03.
+
+    The previous revision's README said `profit_assignment` was "the only policy
+    here that can" decline a load worth less than the run home. It is not: the
+    profit-greedy baseline applies the identical `v > 0` filter and declines
+    MORE. Declining follows from the objective, not from the exact solve, and
+    the claim went unasserted by any test, which is how it survived a revision.
+
+    Counted the way the README states it: trucks a policy left unmatched while
+    at least one legal, still-unused load was available to them.
+    """
+    from roadstar.instance import make_instance as mk
+
+    declined = {name: 0 for name in POLICIES}
+    n_trucks = 0
+    for seed in range(1000, 1030):
+        trucks, loads = mk(40, 50, seed=seed)
+        n_trucks += len(trucks)
+        for name, fn in POLICIES.items():
+            sol = fn(trucks, loads)
+            used_t = {a.truck_id for a in sol.assignments} | {a.truck_id for a in sol.infeasible}
+            used_l = {a.load_id for a in sol.assignments} | {a.load_id for a in sol.infeasible}
+            declined[name] += sum(
+                1 for t in trucks if t.truck_id not in used_t
+                and any(is_feasible(t, ld) for ld in loads if ld.load_id not in used_l)
+            )
+
+    assert n_trucks == 1200
+    assert declined["greedy_profit_pairwise"] == 12
+    assert declined["profit_assignment"] == 8
+    assert declined["greedy_profit_pairwise"] > declined["profit_assignment"], (
+        "the exclusivity claim CLAIMS-03 refuted would be back"
+    )
+    assert declined["greedy_feasible"] == 0 and declined["optimal_assignment"] == 0

@@ -1,6 +1,6 @@
-"""The three dispatch policies compared in this project.
+"""The five dispatch policies compared in this project.
 
-All three are handed the identical instance and scored by the identical
+All five are handed the identical instance and scored by the identical
 feasibility rules (roadstar.feasibility). The differences between them are the
 whole experiment:
 
@@ -26,8 +26,16 @@ whole experiment:
                        actually has. A truck that takes no backhaul still runs
                        empty to its domicile, so the value of a match is scored
                        against that outside option and against the load's
-                       revenue -- not against zero. This is the one policy that
-                       can correctly decline a load.
+                       revenue -- not against zero, which is what lets it
+                       decline a load worth less than sending the truck home.
+
+Declining is a property of the OBJECTIVE, not of the exact solve. Round-2 audit
+finding CLAIMS-03: the previous revision claimed profit_assignment was "the only
+policy here that can" decline, and greedy_profit_pairwise refutes it in this same
+file -- it applies the identical `v > 0` filter and, on the headline sweep,
+declines more often (12 trucks left unmatched beside a legal unused load, against
+profit_assignment's 8, over 1200 trucks). Asserted in
+tests/test_policies.py::test_both_contribution_scored_policies_can_decline_a_load.
 """
 
 from __future__ import annotations
@@ -131,9 +139,13 @@ def profit_assignment(trucks: list[Truck], loads: list[Load]) -> Solution:
                          + cost_per_km * reposition_i
 
     Pairs with v_ij <= 0 are dropped after the solve: taking that load is worth
-    less than sending the truck home, so the model declines it. That makes this
-    the only policy here that can legitimately match fewer loads, which is why
-    revenue and profit are both reported for every policy.
+    less than sending the truck home, so the model declines it. `greedy_profit_
+    pairwise` applies the same filter to the same objective and declines too --
+    round-2 audit finding CLAIMS-03 refuted the previous claim that this was the
+    only policy that could. What is exclusive to the two contribution-scored
+    policies is that they can legitimately match FEWER loads than a
+    distance-scored one, which is why revenue and profit are both reported for
+    every policy rather than matched count alone.
     """
     if not trucks or not loads:
         return Solution("profit_assignment", ())
