@@ -240,7 +240,11 @@ third of those passed all 52 tests — round-2 findings DOMAIN-02 and DOMAIN-03.
 - **No integration with the event's provided APIs or datasets** (Samsara, Truck
   Mate, Motive, DAT, Loadlink) — see the access note above. This is judging
   criterion 4 and it is **unmet**.
-- **No demo video or slide deck yet.** Judging criterion 5 is not yet satisfied.
+- **No slide deck, and the demo video is not in this repository.** A 3–5 minute
+  demo video built from recorded runs of commit `153deaf` exists in the entry
+  workspace (`demo/roadstar_demo.mp4`, 4 min 25 s). It is not committed here and
+  has not been uploaded to any platform. Judging criterion 5 also asks for a
+  10–15 minute live presentation, and that is **unmet**.
 
 ## Layout
 
@@ -295,9 +299,11 @@ things that were not true:
 
 Still open, stated rather than closed quietly:
 
-- **Two rule-mandated artifacts are absent.** No 3–5 minute demo video and no
-  slide deck, and the organiser's submission portal has not been opened. Not
-  agent-closable: it needs a human to create the participant account.
+- **The organiser's submission portal has not been opened.** Not agent-closable:
+  it needs a human to create the participant account. The 3–5 minute demo video
+  the rules demand now exists — built from `script(1)` recordings of commit
+  `153deaf` and kept in the entry workspace, not in this repository — but the
+  slide deck does not, and no entry has been filed anywhere.
 - **Judging criterion 4 (provided data and APIs, 15% of the score) is unmet**,
   and criterion 5 (presentation, 15%) is unmet. Both are in the organiser's own
   rubric and neither is claimed here.

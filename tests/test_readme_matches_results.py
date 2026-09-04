@@ -237,9 +237,16 @@ def test_readme_declares_the_data_as_synthetic(readme):
 
 
 def test_readme_declares_unmet_criteria(readme):
+    """A demo video now exists in the entry workspace, so the old blanket
+    'No demo video or slide deck yet' would itself be false. What the guard has
+    to keep enforcing is the pair of facts that are still true and still
+    unflattering: the video is not in this repository and has been filed
+    nowhere, and criteria 4 and 5 are not satisfied."""
     flat = _flat(readme)
     assert "it is unmet" in flat
-    assert "No demo video or slide deck yet" in flat
+    assert "No slide deck, and the demo video is not in this repository" in flat
+    assert "has not been uploaded to any platform" in flat
+    assert "no entry has been filed anywhere" in flat
     assert "criterion 4 (provided data and APIs, 15% of the score) is unmet" in flat
 
 
