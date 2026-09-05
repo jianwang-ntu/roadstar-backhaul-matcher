@@ -1,0 +1,23 @@
+Script started on 2026-09-05 06:04:57+08:00 [<not executed on terminal>]
+[1m======================================= test session starts ========================================[0m
+platform linux -- Python 3.13.9, pytest-9.0.3, pluggy-1.5.0 -- /data/wj/anaconda/bin/python3
+cachedir: .pytest_cache
+rootdir: /data/wj/wj_code/dl_hackathon/devpost_dirs/workspaces/roadstarhackathon/project
+plugins: asyncio-1.3.0, Faker-40.35.0, langsmith-0.7.26, anyio-4.10.0, respx-0.23.1, httpx-0.36.2, pytest_httpserver-1.1.5, xdist-3.8.0, cov-7.1.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+[1mcollecting ... [0m[1mcollected 10 items                                                                                 [0m
+
+tests/test_hos_binds_the_whole_duty_day.py::test_no_accepted_dispatch_exceeds_the_duty_day[greedy_feasible] [32mPASSED[0m[32m [ 10%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_no_accepted_dispatch_exceeds_the_duty_day[optimal_assignment] [32mPASSED[0m[32m [ 20%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_no_accepted_dispatch_exceeds_the_duty_day[greedy_profit_pairwise] [32mPASSED[0m[32m [ 30%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_no_accepted_dispatch_exceeds_the_duty_day[profit_assignment] [32mPASSED[0m[32m [ 40%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_the_two_earlier_hos_rules_are_measurably_illegal_under_this_one [32mPASSED[0m[32m [ 50%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_the_shipped_rule_reaches_the_ceiling_and_never_passes_it [32mPASSED[0m[32m [ 60%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_how_many_accepted_dispatches_lean_on_the_eight_hour_reset [32mPASSED[0m[32m [ 70%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_a_dispatch_whose_LOADED_leg_breaks_the_ceiling_is_refused [32mPASSED[0m[32m [ 80%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_a_dispatch_whose_SHIPPER_WAIT_breaks_the_ceiling_is_refused [32mPASSED[0m[32m [ 90%][0m
+tests/test_hos_binds_the_whole_duty_day.py::test_the_eight_hour_reset_is_the_only_wait_that_is_forgiven [32mPASSED[0m[32m [100%][0m
+
+[32m======================================== [32m[1m10 passed[0m[32m in 1.51s[0m[32m ========================================[0m
+
+Script done on 2026-09-05 06:05:00+08:00 [COMMAND_EXIT_CODE="0"]

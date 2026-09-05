@@ -1,0 +1,12 @@
+Script started on 2026-09-05 06:35:25+08:00 [<not executed on terminal>]
+$ python3 -m roadstar.experiment --trucks 40 --loads 50 --instances 30 \
+    | jq -r '(header), ($JQ | @tsv)' | column -t          # make demo, formatted for one screen
+
+policy                  deadhead_km  empty_pct  profit_usd  matched  illegal  empty_pct_home  profit_home
+greedy_feasible         4872.481     42.15      3439.26     31.867   0        65.68           -5203.83
+greedy_profit_pairwise  4157.897     34.21      5321.31     32.9     0        61.79           -4188.88
+naive_nearest           7718.603     75.03      -4948.83    13.5     795      81.37           -8652.24
+optimal_assignment      4391.351     35.64      5378.66     35.8     0        63.31           -4750.51
+profit_assignment       3996.065     31.89      6172.08     35.033   0        61.61           -4389.58
+
+Script done on 2026-09-05 06:35:26+08:00 [COMMAND_EXIT_CODE="0"]

@@ -237,17 +237,49 @@ def test_readme_declares_the_data_as_synthetic(readme):
 
 
 def test_readme_declares_unmet_criteria(readme):
-    """A demo video now exists in the entry workspace, so the old blanket
-    'No demo video or slide deck yet' would itself be false. What the guard has
-    to keep enforcing is the pair of facts that are still true and still
-    unflattering: the video is not in this repository and has been filed
-    nowhere, and criteria 4 and 5 are not satisfied."""
+    """The demo video is now committed in this repository, so the old sentence
+    saying it is not would itself be false, and this guard moves with the prose
+    rather than being deleted.
+
+    What it has to keep enforcing is what is still true and still unflattering:
+    the video is on no video-hosting platform, no entry has been filed anywhere,
+    there is no slide deck, and criteria 4 and 5 are not satisfied. Publishing
+    the video into the repository is exactly the kind of good news that tempts a
+    README to quietly drop the bad news beside it."""
     flat = _flat(readme)
     assert "it is unmet" in flat
-    assert "No slide deck, and the demo video is not in this repository" in flat
-    assert "has not been uploaded to any platform" in flat
+    assert "There is no slide deck, and the demo video is not on a video platform" in flat
+    assert ("not been uploaded to YouTube, Vimeo or any other video-hosting "
+            "platform") in flat
     assert "no entry has been filed anywhere" in flat
     assert "criterion 4 (provided data and APIs, 15% of the score) is unmet" in flat
+    # criterion 5's other half is the in-person presentation, still unmet
+    assert "10\u201315 minute live presentation, and that is unmet" in flat
+
+
+def test_the_committed_demo_video_is_the_one_the_readme_describes(readme):
+    """The README now points a judge at a file in this repository. A pointer to
+    a missing or substituted file is worse than no pointer, so the claim is
+    checked against the bytes: the video must be here, and its digest must equal
+    both the short digest the README prints and the full one pinned in
+    demo/ARTIFACT.txt when the video was cut."""
+    video = ROOT / "demo" / "roadstar_demo.mp4"
+    assert video.exists(), "README points at demo/roadstar_demo.mp4; it is not committed"
+
+    import hashlib
+    digest = hashlib.sha256(video.read_bytes()).hexdigest()
+
+    flat = _flat(readme)
+    m = re.search(r"sha256 `?([0-9a-f]{8,64})`?", flat)
+    assert m, "README states no sha256 for the demo video"
+    assert digest.startswith(m.group(1)), (
+        f"README says {m.group(1)}, file is {digest[:16]}")
+
+    artifact = (ROOT / "demo" / "ARTIFACT.txt").read_text()
+    pinned = re.search(r"sha256\s+([0-9a-f]{64})", artifact)
+    assert pinned, "demo/ARTIFACT.txt pins no sha256 for the video"
+    assert pinned.group(1) == digest, (
+        f"ARTIFACT.txt pins {pinned.group(1)[:16]}, file is {digest[:16]}")
 
 
 def test_readme_states_the_accounting_boundary_and_its_direction(readme):

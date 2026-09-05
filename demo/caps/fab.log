@@ -1,0 +1,36 @@
+Script started on 2026-09-05 06:07:25+08:00 [<not executed on terminal>]
+$ sed -i 88s/6,172/9,999/ README.md   # fabricate ONE number in the README
+| **`profit_assignment`** | **3996.1** | **31.89%** | **$9,999** | 35.0 | 0 | 61.61% | −$4,390 |
+
+$ python3 -m pytest tests/test_readme_matches_results.py -q
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[31mF[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[31m                                                                            [100%][0m
+============================================= FAILURES =============================================
+[31m[1m_______________________ test_policy_table_matches_results[profit_assignment] _______________________[0m
+
+data = {'accounting_boundary': 'Primary figures charge the empty repositioning leg TO the pickup, plus the run home of every ...omparisons non-proportionally. Re-run with --cost-per-km to measure that; D7.', 'operating_cost_usd_per_km': 1.1}, ...}
+readme = '# RoadStar backhaul matcher\n\nDeadhead reduction for freight backhaul, built for RoadStar Hackathon 2026.\n\nA tract... the accounting boundary (RUBRIC-05) and the absence of dispersion on the\n  symmetric-boundary columns (RUBRIC-11).\n'
+policy = 'profit_assignment'
+
+    [0m[37m@pytest[39;49;00m.mark.parametrize([33m"[39;49;00m[33mpolicy[39;49;00m[33m"[39;49;00m, POLICIES_IN_TABLE)[90m[39;49;00m
+    [94mdef[39;49;00m[90m [39;49;00m[92mtest_policy_table_matches_results[39;49;00m(data, readme, policy):[90m[39;49;00m
+    [90m    [39;49;00m[33m"""All five rows, all seven numeric columns -- including the two[39;49;00m
+    [33m    symmetric-boundary ones the previous version of this test never read."""[39;49;00m[90m[39;49;00m
+        cells = _row(readme, policy)[90m[39;49;00m
+        p = data[[33m"[39;49;00m[33mper_policy[39;49;00m[33m"[39;49;00m][policy][90m[39;49;00m
+        [94massert[39;49;00m _num(cells[[94m1[39;49;00m]) == pytest.approx(p[[33m"[39;49;00m[33mmean_deadhead_km[39;49;00m[33m"[39;49;00m], [96mabs[39;49;00m=[94m0.1[39;49;00m), [33m"[39;49;00m[33mdeadhead[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+        [94massert[39;49;00m _num(cells[[94m2[39;49;00m]) == pytest.approx([90m[39;49;00m
+            p[[33m"[39;49;00m[33mmean_empty_fraction[39;49;00m[33m"[39;49;00m] * [94m100[39;49;00m, [96mabs[39;49;00m=[94m0.02[39;49;00m), [33m"[39;49;00m[33mempty fraction[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+>       [94massert[39;49;00m _num(cells[[94m3[39;49;00m]) == pytest.approx(p[[33m"[39;49;00m[33mmean_profit_usd[39;49;00m[33m"[39;49;00m], [96mabs[39;49;00m=[94m1.0[39;49;00m), [33m"[39;49;00m[33mprofit[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE       AssertionError: profit[0m
+[1m[31mE       assert 9999.0 == 6172.08 ± 1[0m
+[1m[31mE         [0m
+[1m[31mE         comparison failed[0m
+[1m[31mE         Obtained: 9999.0[0m
+[1m[31mE         Expected: 6172.08 ± 1[0m
+
+[1m[31mtests/test_readme_matches_results.py[0m:100: AssertionError
+[36m[1m===================================== short test summary info ======================================[0m
+[31mFAILED[0m tests/test_readme_matches_results.py::[1mtest_policy_table_matches_results[profit_assignment][0m - AssertionError: profit
+[31m[31m[1m1 failed[0m, [32m16 passed[0m[31m in 1.82s[0m[0m
+
+Script done on 2026-09-05 06:07:28+08:00 [COMMAND_EXIT_CODE="1"]

@@ -1,0 +1,111 @@
+RoadStar Hackathon 2026 -- demo video artifact record
+=====================================================
+job:            devpost:roadstarhackathon
+requirement:    demo_video  (required, organiser rule "video submission (3-5 min)")
+state:          READY at 2026-09-04T22:45:00Z
+built by:       unattended cron tick 2026-09-04T22:00Z
+
+ARTIFACT
+  roadstar_demo.mp4
+  sha256   5b9c850af43164bafe3d67fc17b66d6303dbe6bacb40806f673d743018719c4a
+  bytes    4306997
+  duration 265.034 s  = 4 min 25 s          (rule band: 3-5 min)
+  video    h264 / yuv420p / 1280x720 / 30 fps constant
+  audio    none. There is no narration track; the video is captioned instead,
+           and the verifier asserts nothing on screen claims otherwise.
+
+WHAT IT SHOWS
+  Five segments, each a byte-faithful replay of a real terminal session recorded
+  with util-linux script(1) against the project repository, interleaved with six
+  connective cards:
+
+    caps/dispatch.log     make dispatch -- the actual truck -> load assignment
+    caps/hos.log          the duty-day suite, 10 passed
+    caps/guard_green.log  the README-vs-results guard, 17 passed
+    caps/fab.log          that same guard turned RED on a clean clone by
+                          fabricating exactly one README cell ($6,172 -> $9,999)
+    caps/table.log        a live 30-instance sweep of all five policies
+
+  Nothing is re-typed, re-ordered or re-worded. build_demo_video.py reads those
+  logs and paints them; the only invented pixels are the cards.
+
+INPUTS, PINNED
+  build_demo_video.py   a26c459a4defddeb708af85eadd564f7d4ec3ae3e667cd1bd07fe62dc8606766
+  verify_demo_video.py  99f80825b6dcc6d10a0abaccd8448e8179a84f4f83f49371bc4e6335d91374b5
+  judging_rubric.json   54a157524a0d52ef22b9f6b807b9c93cefd8e2ed84643c3bf33eaf526fba2d7e
+  caps/dispatch.log     19db47356e41561d3ecd0076c173eb1f5b0a5181dabb6858a88337f3fef31500
+  caps/hos.log          a2bbd79cf7e51ebf0e08f7cfc82a083e2be04f5c2df878cd9f2adf9ed856c97a
+  caps/guard_green.log  f6844a5e417597b4369eaf6f4b7e8a56f587ff736f03472f7b4c9e21e401b138
+  caps/fab.log          688f8675b8fb5867b055efe19882d6cfd727f570c15a3665be7f72590e02fbd0
+  caps/table.log        79b8393ba6389547bd664674b947c798bff5f09a4a36a16d7ce73328e2519746
+  project git HEAD      f13af16a4189808f7fa179eb77d218eefdec115b
+
+  caps/demo.log, caps/results.log and caps/test.log were recorded while choosing
+  the segments and are NOT used by any scene. They are kept because deleting a
+  capture that did not make the cut would hide what was tried.
+
+  The captures were recorded against 153deaf; f13af16 is its child and changes
+  only README prose and one test's asserted literal. No result, figure, model or
+  policy differs between them, and the suite is 75 passed at both.
+
+PUBLISHED INTO THE REPOSITORY  2026-09-05, tick 2026-09-05T00:00Z
+  Until this date the video existed only on the entry workspace's local disk:
+  the artifact was verified but no judge could watch it. This whole directory is
+  now also committed inside the project repository, at demo/, so the video is
+  reachable at the same public URL as the code and verify_demo_video.py can be
+  re-run by whoever is judging.
+
+  The two copies are byte-identical and were compared file by file when the
+  second was made. Nothing in the video, the captures or the storyboard changed
+  for publication; the only edits were to verify_demo_video.py, and they were:
+
+    * PROJECT is resolved rather than hard-coded, because `../project` is right
+      in the workspace layout and wrong inside the repository, and a
+      __file__-relative path that is right in only one layout fails silently in
+      the other.
+    * the five judging weights the cards put on screen are now sourced from
+      demo/judging_rubric.json, which ships with the video, because the entry
+      workspace's manifest.json is not in the repository and a check with no
+      source in a clean clone is a check that cannot fail. When the manifest is
+      present both are read and disagreement is a failure.
+
+  Those changes, with the pin and cut-commit checks below, take the
+  run from 54 checks to 62. Both were negative-controlled: a
+  mutated weight in the shipped rubric turns the run RED (2 checks), a permuted
+  weight whose sum is still 95 turns the manifest-agreement check RED on its
+  own, and deleting judging_rubric.json aborts with a non-zero exit rather than
+  passing quietly.
+
+  NOT claimed: the video has not been uploaded to YouTube, Vimeo or any other
+  video-hosting platform, and no entry has been filed anywhere.
+
+REPRODUCE
+  python3 build_demo_video.py caps roadstar_demo.mp4
+  python3 verify_demo_video.py
+
+VERIFICATION (see verify_demo_video.py; 62/62 in both layouts at 2026-09-05T01:05Z)
+  container   playable h264/yuv420p 1280x720; duration inside the 3-5 min band;
+              every frame decodes under `ffmpeg -f null -`
+  provenance  all five capture logs match their pinned sha256, and each is
+              asserted to be the output of the command the video says made it
+  claims      every figure on the cards is recomputed from an artifact --
+              results/sweep_40x50.json, the same file at git 8f97bb1, the
+              shipped README, the capture logs, roadstar.econ's constant, or a
+              judging weight from manifest.json
+  two-sided   28 figures on screen, 0 unsourced. A one-sided presence check is
+              not enough: the first mutation campaign showed a caption could be
+              inflated 31.89% -> 35.00% with every check still green, because
+              31.89% appeared on another card.
+  mutants     /tmp/rs_vmut_20260904T2245Z -- baseline GREEN run first, then 8 of
+              8 killed, 2 of 2 negative controls GREEN.
+
+NOT CLAIMED
+  * The video has not been uploaded to any platform. No entry has been filed.
+    A judge cannot currently reach it, and it therefore scores nothing today.
+  * It does not satisfy criterion 5 on its own. C5 also requires a 10-15 minute
+    in-person live presentation in Waterloo on 2026-09-13 (BLK-RS-03).
+  * It shows no organiser data. Every instance is synthetic, over public
+    corridor coordinates; the portal data sits behind BLK-RS-01 and was never
+    read.
+  * It was verified by execution, not audited. The job's two audit rounds are
+    spent and no third was taken.

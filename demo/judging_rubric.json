@@ -1,0 +1,46 @@
+{
+ "schema": "organiser-judging-rubric/v1",
+ "event": "RoadStar Hackathon 2026",
+ "source": "https://roadstarhackathon.com/judging",
+ "source_pin": {
+  "file": "rules_canonical/20260904T2100Z/organiser_judging.html (entry workspace; not shipped in this repository)",
+  "sha256": "4f94531230cb3e5afbceaab23fe6cd84747d13fda2694f864c6efc49c55a7676",
+  "read_at": "2026-09-04T21:00:00Z"
+ },
+ "judging_scale": 5,
+ "weights_sum_pct": 95,
+ "weights_sum_note": "The organiser's own published weights sum to 95, not 100. Recorded rather than renormalised silently; any score quoted 'out of 100' for this job carries an unstated denominator (this was already found once, as EV-RS-064).",
+ "note": "The organiser's five-criterion rubric, shipped here so demo/verify_demo_video.py can source the weight figures the video puts on screen when it runs from a clean clone, where the entry workspace's manifest.json is not present. When the manifest IS present the verifier reads both and fails if they disagree. Devpost's own structured rubric for this event is a one-line placeholder ('Owner Operator', no weight) and is not used here.",
+ "criteria": [
+  {
+   "id": "C1",
+   "name": "Industry Impact & Relevance",
+   "weight_pct": 25,
+   "question": "Does this solution solve a real problem in trucking/logistics?"
+  },
+  {
+   "id": "C2",
+   "name": "Innovation & Creativity",
+   "weight_pct": 20,
+   "question": "Is this a novel and creative approach?"
+  },
+  {
+   "id": "C3",
+   "name": "Technical Execution & Quality",
+   "weight_pct": 20,
+   "question": "How well was the solution built?"
+  },
+  {
+   "id": "C4",
+   "name": "Use of Provided Data & APIs",
+   "weight_pct": 15,
+   "question": "How effectively did the team use the provided resources?"
+  },
+  {
+   "id": "C5",
+   "name": "Presentation & Demo Quality",
+   "weight_pct": 15,
+   "question": "How clearly did the team communicate their solution?"
+  }
+ ]
+}

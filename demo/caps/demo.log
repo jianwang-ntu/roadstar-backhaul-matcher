@@ -1,0 +1,201 @@
+Script started on 2026-09-05 06:04:26+08:00 [<not executed on terminal>]
+python3 -m roadstar.experiment --trucks 40 --loads 50 --instances 30
+{
+  "accounting_boundary": "Primary figures charge the empty repositioning leg TO the pickup, plus the run home of every UNMATCHED truck. The post-delivery run home of a MATCHED truck lies outside the single-period boundary, so the primary empty fractions are LOWER BOUNDS and the primary profits UPPER BOUNDS. The fully symmetric figures are reported alongside as *_incl_return_leg and they reverse the headline; see README.",
+  "comparisons": [
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 42.317,
+      "higher_is_better": false,
+      "mean_abs_improvement": 481.13,
+      "mean_baseline": 4872.481,
+      "mean_rel_improvement_pct": 9.466,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 4391.351,
+      "median_rel_improvement_pct": 8.458,
+      "metric": "deadhead_km",
+      "n_instances": 30,
+      "n_losses": 2,
+      "n_ties": 0,
+      "n_wins": 28,
+      "ratio_of_means_rel_improvement_pct": 9.874,
+      "stdev_abs_improvement": 580.361,
+      "stdev_rel_improvement_pct": 12.335,
+      "treatment": "optimal_assignment",
+      "worst_instance_rel_improvement_pct": -31.498
+    },
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 44.695,
+      "higher_is_better": false,
+      "mean_abs_improvement": 876.416,
+      "mean_baseline": 4872.481,
+      "mean_rel_improvement_pct": 17.457,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 3996.065,
+      "median_rel_improvement_pct": 15.51,
+      "metric": "deadhead_km",
+      "n_instances": 30,
+      "n_losses": 1,
+      "n_ties": 0,
+      "n_wins": 29,
+      "ratio_of_means_rel_improvement_pct": 17.987,
+      "stdev_abs_improvement": 740.047,
+      "stdev_rel_improvement_pct": 12.402,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": -1.163
+    },
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 1527.446,
+      "higher_is_better": true,
+      "mean_abs_improvement": 2732.823,
+      "mean_baseline": 3439.256,
+      "mean_rel_improvement_pct": 151.993,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 6172.079,
+      "median_rel_improvement_pct": 62.485,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 0,
+      "n_wins": 30,
+      "ratio_of_means_rel_improvement_pct": 79.46,
+      "stdev_abs_improvement": 973.426,
+      "stdev_rel_improvement_pct": 290.436,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": 33.15
+    },
+    {
+      "baseline": "optimal_assignment",
+      "best_instance_rel_improvement_pct": 358.041,
+      "higher_is_better": true,
+      "mean_abs_improvement": 793.414,
+      "mean_baseline": 5378.665,
+      "mean_rel_improvement_pct": 27.245,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 6172.079,
+      "median_rel_improvement_pct": 12.094,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 1,
+      "n_wins": 29,
+      "ratio_of_means_rel_improvement_pct": 14.751,
+      "stdev_abs_improvement": 532.15,
+      "stdev_rel_improvement_pct": 64.06,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": 0.0
+    },
+    {
+      "baseline": "greedy_feasible",
+      "best_instance_rel_improvement_pct": 1088.284,
+      "higher_is_better": true,
+      "mean_abs_improvement": 1882.052,
+      "mean_baseline": 3439.256,
+      "mean_rel_improvement_pct": 109.046,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 5321.309,
+      "median_rel_improvement_pct": 43.935,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 0,
+      "n_wins": 30,
+      "ratio_of_means_rel_improvement_pct": 54.723,
+      "stdev_abs_improvement": 932.22,
+      "stdev_rel_improvement_pct": 212.573,
+      "treatment": "greedy_profit_pairwise",
+      "worst_instance_rel_improvement_pct": 10.567
+    },
+    {
+      "baseline": "greedy_profit_pairwise",
+      "best_instance_rel_improvement_pct": 46.505,
+      "higher_is_better": true,
+      "mean_abs_improvement": 850.77,
+      "mean_baseline": 5321.309,
+      "mean_rel_improvement_pct": 18.207,
+      "mean_rel_improvement_pct_is": "mean of per-instance ratios, not a ratio of means",
+      "mean_treatment": 6172.079,
+      "median_rel_improvement_pct": 14.886,
+      "metric": "profit_usd",
+      "n_instances": 30,
+      "n_losses": 0,
+      "n_ties": 0,
+      "n_wins": 30,
+      "ratio_of_means_rel_improvement_pct": 15.988,
+      "stdev_abs_improvement": 357.177,
+      "stdev_rel_improvement_pct": 11.157,
+      "treatment": "profit_assignment",
+      "worst_instance_rel_improvement_pct": 6.497
+    }
+  ],
+  "config": {
+    "instances": 30,
+    "loads": 50,
+    "seeds": [
+      1000,
+      1029
+    ],
+    "trucks": 40
+  },
+  "cost_model": {
+    "note": "stated modelling assumption. Profit is revenue MINUS cost*km, so it does not merely scale with this constant -- the constant moves profit and the relative comparisons non-proportionally. Re-run with --cost-per-km to measure that; D7.",
+    "operating_cost_usd_per_km": 1.1
+  },
+  "data_provenance": "SYNTHETIC instances (roadstar.instance.make_instance) over real public corridor coordinates (roadstar.geo.CORRIDOR). No organiser portal data was used; the portal loader raises rather than falling back (see README, 'Read this before any number below').",
+  "per_policy": {
+    "greedy_feasible": {
+      "mean_deadhead_km": 4872.481,
+      "mean_empty_fraction": 0.421491,
+      "mean_empty_fraction_incl_return_leg": 0.656827,
+      "mean_matched": 31.867,
+      "mean_profit_usd": 3439.26,
+      "mean_profit_usd_incl_return_leg": -5203.83,
+      "mean_revenue_usd": 16095.65,
+      "total_infeasible_proposed": 0
+    },
+    "greedy_profit_pairwise": {
+      "mean_deadhead_km": 4157.897,
+      "mean_empty_fraction": 0.342071,
+      "mean_empty_fraction_incl_return_leg": 0.617872,
+      "mean_matched": 32.9,
+      "mean_profit_usd": 5321.31,
+      "mean_profit_usd_incl_return_leg": -4188.88,
+      "mean_revenue_usd": 18617.27,
+      "total_infeasible_proposed": 0
+    },
+    "naive_nearest": {
+      "mean_deadhead_km": 7718.603,
+      "mean_empty_fraction": 0.750308,
+      "mean_empty_fraction_incl_return_leg": 0.813724,
+      "mean_matched": 13.5,
+      "mean_profit_usd": -4948.83,
+      "mean_profit_usd_incl_return_leg": -8652.24,
+      "mean_revenue_usd": 6360.04,
+      "total_infeasible_proposed": 795
+    },
+    "optimal_assignment": {
+      "mean_deadhead_km": 4391.351,
+      "mean_empty_fraction": 0.356361,
+      "mean_empty_fraction_incl_return_leg": 0.633134,
+      "mean_matched": 35.8,
+      "mean_profit_usd": 5378.66,
+      "mean_profit_usd_incl_return_leg": -4750.51,
+      "mean_revenue_usd": 18881.79,
+      "total_infeasible_proposed": 0
+    },
+    "profit_assignment": {
+      "mean_deadhead_km": 3996.065,
+      "mean_empty_fraction": 0.318889,
+      "mean_empty_fraction_incl_return_leg": 0.616139,
+      "mean_matched": 35.033,
+      "mean_profit_usd": 6172.08,
+      "mean_profit_usd_incl_return_leg": -4389.58,
+      "mean_revenue_usd": 19901.26,
+      "total_infeasible_proposed": 0
+    }
+  }
+}
+
+Script done on 2026-09-05 06:04:27+08:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,47 @@
+Script started on 2026-09-05 06:04:14+08:00 [<not executed on terminal>]
+python3 -m roadstar.experiment --trucks 40 --loads 50 --dispatch
+# profit_assignment dispatch, synthetic instance seed=1000 (40 trucks x 50 loads)
+ truck at              load origin         dest           deadhead_km arrive_min contribution_usd
+  T000 Ottawa, ON      L039 Oshawa, ON     Mississauga, ON       363.0        437           355.60
+  T001 Windsor, ON     L040 Guelph, ON     Toronto, ON          318.0        285           733.88
+  T002 Toronto, ON     L030 Mississauga, ON Hamilton, ON          26.6        334           206.08
+  T003 Guelph, ON      L026 London, ON     Guelph, ON           122.3        402           135.61
+  T004 Sarnia, ON      L007 Waterloo, ON   Barrie, ON           194.7        468           807.83
+  T005 Sarnia, ON      L034 Sarnia, ON     Woodstock, ON          0.0        255           517.16
+  T006 Guelph, ON      L015 Waterloo, ON   Montreal, QC          28.4         51           759.74
+  T008 Mississauga, ON  L019 Toronto, ON    Windsor, ON           26.6        124           736.76
+  T009 London, ON      L000 Brampton, ON   Buffalo, NY          175.0        334           320.55
+  T010 Mississauga, ON  L003 Toronto, ON    Ottawa, ON            26.6         34           525.18
+  T011 London, ON      L016 Brampton, ON   Guelph, ON           175.0        289           231.42
+  T012 Mississauga, ON  L002 Toronto, ON    London, ON            26.6        169           936.57
+  T013 Oshawa, ON      L043 Oshawa, ON     London, ON             0.0        105           463.87
+  T014 London, ON      L028 Cambridge, ON  Montreal, QC         103.6        224          1217.79
+  T015 Toronto, ON     L042 Toronto, ON    Guelph, ON             0.0        285           648.39
+  T016 Barrie, ON      L033 Oshawa, ON     London, ON           102.7         88           466.61
+  T017 Cambridge, ON   L018 Woodstock, ON  Kingston, ON          52.1        127           468.89
+  T018 Detroit, MI     L012 Windsor, ON    Detroit, MI            2.4        122           121.79
+  T019 Cambridge, ON   L032 Cambridge, ON  Kingston, ON           0.0        300           459.71
+  T020 Woodstock, ON   L005 Brampton, ON   Montreal, QC         124.6        118           539.12
+  T021 Kitchener, ON   L009 Kitchener, ON  Buffalo, NY            0.0        285           412.36
+  T022 Waterloo, ON    L011 Guelph, ON     Ottawa, ON            28.4        231           463.93
+  T023 Waterloo, ON    L037 Waterloo, ON   Montreal, QC           0.0        330          1237.68
+  T024 Sarnia, ON      L017 Brampton, ON   Oshawa, ON           275.7        510           186.84
+  T025 Hamilton, ON    L035 Hamilton, ON   Brampton, ON           0.0        195           335.76
+  T026 Mississauga, ON  L038 Mississauga, ON Brampton, ON           0.0        150           483.60
+  T027 Detroit, MI     L022 Kitchener, ON  Oshawa, ON           290.9        461           333.68
+  T028 Detroit, MI     L031 Guelph, ON     Kingston, ON         317.6        420           553.80
+  T029 Cambridge, ON   L013 Cambridge, ON  Oshawa, ON             0.0        150           260.96
+  T030 Ottawa, ON      L020 Kingston, ON   Mississauga, ON       175.5        199           704.75
+  T031 Cambridge, ON   L004 Brampton, ON   Kingston, ON          72.7        112           304.32
+  T032 Toronto, ON     L023 Oshawa, ON     Buffalo, NY           59.5        163           473.37
+  T033 Buffalo, NY     L036 Oshawa, ON     Cambridge, ON        134.9        441           767.29
+  T034 Guelph, ON      L048 Guelph, ON     Mississauga, ON         0.0        345           513.41
+  T035 Windsor, ON     L008 Cambridge, ON  Ottawa, ON           300.7        543           181.01
+  T036 Ottawa, ON      L027 Ottawa, ON     London, ON             0.0          0           586.62
+  T037 Oshawa, ON      L045 Oshawa, ON     Windsor, ON            0.0        255           650.11
+  T039 London, ON      L044 Woodstock, ON  Hamilton, ON          52.4        172           252.22
+  T007 London, ON        -- (no backhaul worth taking)           95.2                            
+  T038 Windsor, ON       -- (no backhaul worth taking)          289.8                            
+# matched 38 of 40 trucks
+
+Script done on 2026-09-05 06:04:14+08:00 [COMMAND_EXIT_CODE="0"]

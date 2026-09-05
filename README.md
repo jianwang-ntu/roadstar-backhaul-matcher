@@ -25,6 +25,18 @@ synthetic data, so no run can ever report portal numbers it did not have.
 
 Nothing in this README is claimed as a measurement of a real carrier's fleet.
 
+## The demo video
+
+`demo/roadstar_demo.mp4` — 4 min 25 s, 1280x720, no audio track. Every terminal
+segment in it is a byte-faithful replay of a session recorded with `script(1)`
+against this repository: the dispatch run, the duty-day suite, the
+README-versus-results guard passing, that same guard turned red by fabricating
+one README cell, and a live 30-instance sweep. The only invented pixels are the
+connective cards, and every figure on them is re-derived from an artifact on
+disk by `demo/verify_demo_video.py`, which fails if the storyboard and the
+artifacts disagree. It has not been uploaded to any video-hosting platform; it
+is in this repository or nowhere.
+
 ## The accounting boundary, before the table
 
 Three boundary facts decide how every number below should be read. All three
@@ -182,7 +194,7 @@ vacuous.
 
 ```
 pip install -r requirements.txt
-make test      # 75 tests
+make test      # 76 tests
 make sweep     # regenerates results/*.json
 make dispatch  # prints the actual truck -> load dispatch for one instance
 ```
@@ -240,11 +252,13 @@ third of those passed all 52 tests — round-2 findings DOMAIN-02 and DOMAIN-03.
 - **No integration with the event's provided APIs or datasets** (Samsara, Truck
   Mate, Motive, DAT, Loadlink) — see the access note above. This is judging
   criterion 4 and it is **unmet**.
-- **No slide deck, and the demo video is not in this repository.** A 3–5 minute
-  demo video built from recorded runs of commit `153deaf` exists in the entry
-  workspace (`demo/roadstar_demo.mp4`, 4 min 25 s). It is not committed here and
-  has not been uploaded to any platform. Judging criterion 5 also asks for a
-  10–15 minute live presentation, and that is **unmet**.
+- **There is no slide deck, and the demo video is not on a video platform.**
+  The 3–5 minute demo video the rules ask for is committed here, at
+  `demo/roadstar_demo.mp4` — 4 min 25 s, built from `script(1)` recordings of
+  real runs of commit `153deaf`, sha256 `5b9c850a`. It has **not been uploaded
+  to YouTube, Vimeo or any other video-hosting platform**, and **no entry has
+  been filed anywhere**. Judging criterion 5 also asks for a 10–15 minute live
+  presentation, and that is **unmet**.
 
 ## Layout
 
@@ -258,7 +272,13 @@ roadstar/policies.py      the five policies
 roadstar/instance.py      seeded synthetic generator + the portal seam
 roadstar/metrics.py       empty-mile and contribution accounting
 roadstar/experiment.py    sweep runner and paired comparison
-tests/                    75 tests
+tests/                    76 tests
+demo/roadstar_demo.mp4    the 3-5 minute demo video (4 min 25 s, no audio)
+demo/caps/                the script(1) terminal captures it replays
+demo/build_demo_video.py  the renderer that paints those captures
+demo/verify_demo_video.py runtime evidence for the video; `python3
+                          demo/verify_demo_video.py` re-checks it from a clone
+demo/judging_rubric.json  the organiser's five criteria and weights
 requirements.txt          runtime + test dependencies
 conftest.py               makes `pytest -q` work on a clean checkout
 ```
@@ -301,9 +321,10 @@ Still open, stated rather than closed quietly:
 
 - **The organiser's submission portal has not been opened.** Not agent-closable:
   it needs a human to create the participant account. The 3–5 minute demo video
-  the rules demand now exists — built from `script(1)` recordings of commit
-  `153deaf` and kept in the entry workspace, not in this repository — but the
-  slide deck does not, and no entry has been filed anywhere.
+  the rules demand exists and is committed here at `demo/roadstar_demo.mp4`,
+  built from `script(1)` recordings of commit `153deaf`; the slide deck does
+  not exist, the video is on no video-hosting platform, and no entry has been
+  filed anywhere.
 - **Judging criterion 4 (provided data and APIs, 15% of the score) is unmet**,
   and criterion 5 (presentation, 15%) is unmet. Both are in the organiser's own
   rubric and neither is claimed here.

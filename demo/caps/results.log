@@ -1,0 +1,55 @@
+Script started on 2026-09-05 06:05:23+08:00 [<not executed on terminal>]
+[1;39m{[0m
+  [1;34m"greedy_feasible"[0m[1;39m:[0m [1;39m{[0m
+    [1;34m"mean_deadhead_km"[0m[1;39m:[0m [0;39m4872.481[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction"[0m[1;39m:[0m [0;39m0.421491[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction_incl_return_leg"[0m[1;39m:[0m [0;39m0.656827[0m[1;39m,[0m
+    [1;34m"mean_matched"[0m[1;39m:[0m [0;39m31.867[0m[1;39m,[0m
+    [1;34m"mean_profit_usd"[0m[1;39m:[0m [0;39m3439.26[0m[1;39m,[0m
+    [1;34m"mean_profit_usd_incl_return_leg"[0m[1;39m:[0m [0;39m-5203.83[0m[1;39m,[0m
+    [1;34m"mean_revenue_usd"[0m[1;39m:[0m [0;39m16095.65[0m[1;39m,[0m
+    [1;34m"total_infeasible_proposed"[0m[1;39m:[0m [0;39m0[0m
+  [1;39m}[0m[1;39m,[0m
+  [1;34m"greedy_profit_pairwise"[0m[1;39m:[0m [1;39m{[0m
+    [1;34m"mean_deadhead_km"[0m[1;39m:[0m [0;39m4157.897[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction"[0m[1;39m:[0m [0;39m0.342071[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction_incl_return_leg"[0m[1;39m:[0m [0;39m0.617872[0m[1;39m,[0m
+    [1;34m"mean_matched"[0m[1;39m:[0m [0;39m32.9[0m[1;39m,[0m
+    [1;34m"mean_profit_usd"[0m[1;39m:[0m [0;39m5321.31[0m[1;39m,[0m
+    [1;34m"mean_profit_usd_incl_return_leg"[0m[1;39m:[0m [0;39m-4188.88[0m[1;39m,[0m
+    [1;34m"mean_revenue_usd"[0m[1;39m:[0m [0;39m18617.27[0m[1;39m,[0m
+    [1;34m"total_infeasible_proposed"[0m[1;39m:[0m [0;39m0[0m
+  [1;39m}[0m[1;39m,[0m
+  [1;34m"naive_nearest"[0m[1;39m:[0m [1;39m{[0m
+    [1;34m"mean_deadhead_km"[0m[1;39m:[0m [0;39m7718.603[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction"[0m[1;39m:[0m [0;39m0.750308[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction_incl_return_leg"[0m[1;39m:[0m [0;39m0.813724[0m[1;39m,[0m
+    [1;34m"mean_matched"[0m[1;39m:[0m [0;39m13.5[0m[1;39m,[0m
+    [1;34m"mean_profit_usd"[0m[1;39m:[0m [0;39m-4948.83[0m[1;39m,[0m
+    [1;34m"mean_profit_usd_incl_return_leg"[0m[1;39m:[0m [0;39m-8652.24[0m[1;39m,[0m
+    [1;34m"mean_revenue_usd"[0m[1;39m:[0m [0;39m6360.04[0m[1;39m,[0m
+    [1;34m"total_infeasible_proposed"[0m[1;39m:[0m [0;39m795[0m
+  [1;39m}[0m[1;39m,[0m
+  [1;34m"optimal_assignment"[0m[1;39m:[0m [1;39m{[0m
+    [1;34m"mean_deadhead_km"[0m[1;39m:[0m [0;39m4391.351[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction"[0m[1;39m:[0m [0;39m0.356361[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction_incl_return_leg"[0m[1;39m:[0m [0;39m0.633134[0m[1;39m,[0m
+    [1;34m"mean_matched"[0m[1;39m:[0m [0;39m35.8[0m[1;39m,[0m
+    [1;34m"mean_profit_usd"[0m[1;39m:[0m [0;39m5378.66[0m[1;39m,[0m
+    [1;34m"mean_profit_usd_incl_return_leg"[0m[1;39m:[0m [0;39m-4750.51[0m[1;39m,[0m
+    [1;34m"mean_revenue_usd"[0m[1;39m:[0m [0;39m18881.79[0m[1;39m,[0m
+    [1;34m"total_infeasible_proposed"[0m[1;39m:[0m [0;39m0[0m
+  [1;39m}[0m[1;39m,[0m
+  [1;34m"profit_assignment"[0m[1;39m:[0m [1;39m{[0m
+    [1;34m"mean_deadhead_km"[0m[1;39m:[0m [0;39m3996.065[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction"[0m[1;39m:[0m [0;39m0.318889[0m[1;39m,[0m
+    [1;34m"mean_empty_fraction_incl_return_leg"[0m[1;39m:[0m [0;39m0.616139[0m[1;39m,[0m
+    [1;34m"mean_matched"[0m[1;39m:[0m [0;39m35.033[0m[1;39m,[0m
+    [1;34m"mean_profit_usd"[0m[1;39m:[0m [0;39m6172.08[0m[1;39m,[0m
+    [1;34m"mean_profit_usd_incl_return_leg"[0m[1;39m:[0m [0;39m-4389.58[0m[1;39m,[0m
+    [1;34m"mean_revenue_usd"[0m[1;39m:[0m [0;39m19901.26[0m[1;39m,[0m
+    [1;34m"total_infeasible_proposed"[0m[1;39m:[0m [0;39m0[0m
+  [1;39m}[0m
+[1;39m}[0m
+
+Script done on 2026-09-05 06:05:23+08:00 [COMMAND_EXIT_CODE="0"]
