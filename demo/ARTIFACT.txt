@@ -83,7 +83,7 @@ REPRODUCE
   python3 build_demo_video.py caps roadstar_demo.mp4
   python3 verify_demo_video.py
 
-VERIFICATION (see verify_demo_video.py; 62/62 in both layouts at 2026-09-05T01:05Z)
+VERIFICATION (see verify_demo_video.py; 62/62 at 2026-09-05T01:05Z, both layouts)
   container   playable h264/yuv420p 1280x720; duration inside the 3-5 min band;
               every frame decodes under `ffmpeg -f null -`
   provenance  all five capture logs match their pinned sha256, and each is
