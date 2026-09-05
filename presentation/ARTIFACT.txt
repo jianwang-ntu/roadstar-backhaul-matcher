@@ -1,0 +1,136 @@
+RoadStar Hackathon 2026 -- live-presentation artifact record
+============================================================
+
+job:            devpost:roadstarhackathon
+requirement:    live_presentation  (required, organiser rule "live presentation (10-15 min)")
+state:          DRAFT at 2026-09-05T04:05:00Z
+built by:       unattended cron tick 2026-09-05T03:30Z
+
+WHAT DRAFT MEANS HERE, AND WHAT IT DOES NOT
+  The MATERIAL for the presentation now exists and is verified. A presentation
+  is NOT scheduled and nobody will be in Waterloo on 2026-09-13. This row is
+  DRAFT, not READY, and it does not become READY by anyone being satisfied with
+  the deck; it becomes READY only if BLK-RS-03 resolves in a way that gives this
+  entrant a slot to deliver it in. The entrant is resident in Singapore, the
+  judging session is in person at the Spur Innovation Center, and the organiser
+  has not published whether a remote entrant may present or stay prize-eligible.
+  The question was put to the organiser at 2026-09-05T02:40:15Z and is unanswered.
+
+  Before this tick the write-up said, accurately, "There is no slide deck."
+  There is now, so that line has been corrected in all three surfaces that
+  carried it -- submission/writeup.md, submission/devpost_description.md and the
+  description inside submission/devpost_project_payload.json -- rather than in
+  the one that was easiest to reach.
+
+ARTIFACTS
+  slides.md                 the deck, source of truth for every figure
+  script.md                 the spoken script, timed per slide
+  slides.html               slides.md rendered; self-contained, opens offline
+  build_presentation.py     slides.md -> slides.html; records the source digest
+  verify_presentation.py    the check that can go red
+  audit_scores_pinned.json  four audit figures, pinned for a clean-clone run
+
+  13 slides, 790 s of script = 13 min 10 s, inside the organiser's 10-15 minute
+  band with 110 s of headroom. 1,898 spoken words, every block between 135.3
+  and 157.6 words per minute (measured, not asserted).
+
+DIGESTS
+  slides.md                 ca4633640d37ff8b0d04cf3fbac1cfa278d6399e1fc052187e426b0fcbfd7db9
+  script.md                 d86ac2eceb1d476b3b95eadbfaa825faae12c7c12c122e99fc6952645ad8b24e
+  slides.html               d719f52ad5df1d25007d62433dbb2f6157335b185e7785cdae1d2c5ca921386e
+  build_presentation.py     42ce5e027d449c997442eefced78bca0bb90466563f77d17a792f2ba3a264362
+  verify_presentation.py    8e19465418e64aad48ee141c95dccf2aee965cc62ed7a0756e4287402d058387
+  audit_scores_pinned.json  b3960fa227ffbf1270977183898e888f75c0bad6fc7ac718bc8ede0159a9e2a5
+  project git HEAD at build ee4da979c5c9e00077329f028156a73a7c3d321a
+
+WHAT WAS VERIFIED, AND HOW IT CAN FAIL
+  `python3 verify_presentation.py` -- 58 figures, GREEN, plus 17 negative
+  controls each of which must turn a NAMED check red.
+
+  A. STRUCTURE  every slide declares seconds and criteria; slides and script
+                blocks are in bijection.
+  B. TIMING     the seconds sum inside 600-900 s, and each block's word count
+                implies 100-165 wpm. A slide cannot be given 30 s and 400 words.
+  C. FIGURES    all 58 recomputed or re-read from a primary artifact: the two
+                results JSONs, the HOS test's own parametrisation, the audit
+                reports, demo/ARTIFACT.txt, demo/judging_rubric.json,
+                roadstar/geo.py, `git show 8f97bb1` for the pre-revision
+                figures, and a live `pytest --collect-only` for the test count.
+                Not one figure is read out of README.md or writeup.md -- those
+                are downstream of the same artifacts and would only launder an
+                error.
+  D. UNSOURCED  the two-sided half. Every claimed literal is deleted from the
+                deck and any number-shaped token that SURVIVES must be on an
+                allow-list that states why it is not a measurement. This is the
+                half that fails on a figure nobody remembered to claim; a
+                presence check alone cannot fail.
+  E. DISCLOSE   nine statements that must not quietly disappear, checked in the
+                slides and in the script SEPARATELY. The first draft checked the
+                concatenation, and a control proved that a disclosure deleted
+                from the slides passed because the script still carried it.
+  F. FORBID     seven claims this entry must never make -- a hosted video,
+                portal data, regulatory compliance, an attendance promise, a
+                production deployment, a prize, and the skewed +151.993%
+                headline -- absent from both documents.
+  G. RUBRIC     the criteria tags cover C1..C5; the rubric file is self-consistent.
+  H. RENDERED   slides.html records the sha256 of the slides.md it was built
+                from, and a mismatch is red. It also carries no remote resource,
+                and every checked figure must survive rendering.
+
+  Negative controls, all 17 firing the check they name:
+    figure changed by one digit / audit score flattered / unsourced number
+    introduced / audit pin drifts from the report / reversal deleted / C4
+    quietly upgraded / skew warning dropped / synthetic disclosure removed /
+    open findings hushed / script drops the skew warning / script drops the
+    reversal / video claimed as hosted / compliance asserted / slides.md edited
+    without rebuilding / deck overruns the band / slide starved of script /
+    results JSON moved under a still deck.
+
+  Two of those controls are worth naming individually.
+
+  "results JSON moved under a still deck" copies the whole project to a
+  temporary tree, moves profit_assignment's mean profit to 9,999, and requires
+  the deck to go red without the deck being touched. It is the only control that
+  can catch build_figures() being quietly turned into a table of constants --
+  every other control moves the deck, and a table of constants would still pass
+  those.
+
+  "figure changed by one digit" was WRONG when first written. It moved "$6,172"
+  and asserted C.present would fire; it did not, because slide 10 quotes the
+  same figure again, so the control was reporting the strength of a check it was
+  never reaching. It is now anchored on a figure that appears exactly once. The
+  broken version is recorded rather than deleted, because a control that passes
+  for the wrong reason is the failure this whole file exists to catch.
+
+WHAT THIS DECK CLAIMS
+  Nothing that is not in the repository. The headline it leads with is the
+  +18.207% against the PROFIT baseline, not the +79.460% against the distance
+  one, because the profit baseline already optimises the right objective and is
+  the harder comparison. Slide 7 tells a judge not to quote the +151.993%
+  figure and says why. Slide 9 states the accounting boundary under which this
+  entry is NOT the best policy, and names the one that is. Slide 11 states that
+  criterion 4 -- 15% of the rubric -- is unmet, and that the entrant read none
+  of the provided data.
+
+WHAT THIS DECK DOES NOT DO
+  It does not make the presentation happen (BLK-RS-03).
+  It does not make the entry reachable in the organiser's own channel (BLK-RS-01).
+  It does not change any measured result. No figure in the repository moved.
+  It does not raise C5 to met: C5 is satisfied_by [demo_video, live_presentation]
+  and only the first is READY. A deck that no one has a slot to present is not
+  a presentation, and this record does not pretend otherwise.
+
+PUBLISHED INTO THE REPOSITORY  2026-09-05, tick 2026-09-05T03:30Z
+  The same reasoning that published the demo video: an artifact a judge cannot
+  reach is not evidence. This directory is committed at presentation/ in
+  https://github.com/jianwang-ntu/roadstar-backhaul-matcher and the two copies
+  are byte-identical, compared file by file when the second was made.
+
+  verify_presentation.py runs from a clean clone with no entry workspace: the
+  audit reports are the only source it needs that is not in the repository, and
+  they are deliberately NOT shipped -- shipping them would contaminate any
+  future blind audit round. audit_scores_pinned.json carries the four numbers
+  and their source digests instead. When the entry workspace IS present the
+  verifier reads the real reports and FAILS if they disagree with the pin, so
+  the pin cannot quietly become the only source of truth. A control exercises
+  that disagreement.

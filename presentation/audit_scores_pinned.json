@@ -1,0 +1,17 @@
+{
+ "schema": "presentation-audit-pin/v1",
+ "why": "The deck quotes four numbers that come from the two independent audit reports, and those reports are NOT shipped in this repository -- shipping them would contaminate any future blind audit round. They are pinned here so verify_presentation.py can check the deck from a clean clone. When the entry workspace IS present the verifier reads the real files and FAILS if they disagree with this pin, so the pin cannot drift into being the only source of truth.",
+ "pinned_at": "2026-09-05T03:55:00Z",
+ "round1": {
+  "file": "audit/audit_round1.json (entry workspace; not shipped in this repository)",
+  "sha256": "0251392618ec8c98599e8dd1d44e8f55c5044412f5d10ac401571866a097d4ea",
+  "overall": 37.28,
+  "defects": 15
+ },
+ "round2": {
+  "file": "audit/audit_round2.json (entry workspace; not shipped in this repository)",
+  "sha256": "7ddcb73f561dc440da43491d272222959ad354dc7f4e6d0c5863fe82436c6cc4",
+  "mean_of_completed_lenses": 44.67,
+  "findings_total": 34
+ }
+}

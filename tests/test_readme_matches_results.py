@@ -243,18 +243,25 @@ def test_readme_declares_unmet_criteria(readme):
 
     What it has to keep enforcing is what is still true and still unflattering:
     the video is on no video-hosting platform, no entry has been filed anywhere,
-    there is no slide deck, and criteria 4 and 5 are not satisfied. Publishing
-    the video into the repository is exactly the kind of good news that tempts a
-    README to quietly drop the bad news beside it."""
+    the deck has no slot to be presented in, and criteria 4 and 5 are not
+    satisfied. Publishing the video into the repository is exactly the kind of
+    good news that tempts a README to quietly drop the bad news beside it -- and
+    2026-09-05 proved the point twice, because building the deck made the old
+    sentence "there is no slide deck" false, and the temptation was to replace it
+    with the deck's path and stop there."""
     flat = _flat(readme)
     assert "it is unmet" in flat
-    assert "There is no slide deck, and the demo video is not on a video platform" in flat
+    assert "demo video is not on a video platform" in flat
+    assert "a deck is not a presentation" in flat
+    assert "has no slot to be delivered in" in flat
     assert ("not been uploaded to YouTube, Vimeo or any other video-hosting "
             "platform") in flat
     assert "no entry has been filed anywhere" in flat
     assert "criterion 4 (provided data and APIs, 15% of the score) is unmet" in flat
-    # criterion 5's other half is the in-person presentation, still unmet
-    assert "10\u201315 minute live presentation, and that is unmet" in flat
+    # criterion 5's other half is the in-person presentation. The deck for it
+    # now exists, which is precisely why the verdict has to stay on the page.
+    assert "10\u201315 minute live presentation" in flat
+    assert "Criterion 5 stays unmet" in flat
 
 
 def test_the_committed_demo_video_is_the_one_the_readme_describes(readme):

@@ -252,13 +252,17 @@ third of those passed all 52 tests — round-2 findings DOMAIN-02 and DOMAIN-03.
 - **No integration with the event's provided APIs or datasets** (Samsara, Truck
   Mate, Motive, DAT, Loadlink) — see the access note above. This is judging
   criterion 4 and it is **unmet**.
-- **There is no slide deck, and the demo video is not on a video platform.**
-  The 3–5 minute demo video the rules ask for is committed here, at
-  `demo/roadstar_demo.mp4` — 4 min 25 s, built from `script(1)` recordings of
+- **The demo video is not on a video platform, and the deck has no slot to be
+  presented in.** The 3–5 minute demo video the rules ask for is committed here,
+  at `demo/roadstar_demo.mp4` — 4 min 25 s, built from `script(1)` recordings of
   real runs of commit `153deaf`, sha256 `5b9c850a`. It has **not been uploaded
   to YouTube, Vimeo or any other video-hosting platform**, and **no entry has
   been filed anywhere**. Judging criterion 5 also asks for a 10–15 minute live
-  presentation, and that is **unmet**.
+  presentation. The material for it is committed at `presentation/` — 13 slides
+  and a 13 min 10 s timed script — but **a deck is not a presentation**: this
+  entrant is in Singapore, the session is in person in Waterloo, and whether a
+  remote entrant may present at all is unpublished. Criterion 5 stays
+  **unmet**.
 
 ## Layout
 
@@ -322,9 +326,9 @@ Still open, stated rather than closed quietly:
 - **The organiser's submission portal has not been opened.** Not agent-closable:
   it needs a human to create the participant account. The 3–5 minute demo video
   the rules demand exists and is committed here at `demo/roadstar_demo.mp4`,
-  built from `script(1)` recordings of commit `153deaf`; the slide deck does
-  not exist, the video is on no video-hosting platform, and no entry has been
-  filed anywhere.
+  built from `script(1)` recordings of commit `153deaf`; the presentation deck
+  exists at `presentation/` but has no slot to be delivered in, the video is on
+  no video-hosting platform, and no entry has been filed anywhere.
 - **Judging criterion 4 (provided data and APIs, 15% of the score) is unmet**,
   and criterion 5 (presentation, 15%) is unmet. Both are in the organiser's own
   rubric and neither is claimed here.
