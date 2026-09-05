@@ -75,7 +75,7 @@ A comparison in which the baseline is allowed to cheat is not a comparison.
 
 ---
 
-<!-- slide: 5 | seconds: 70 | criteria: C2 -->
+<!-- slide: 5 | seconds: 80 | criteria: C2 -->
 ## The objective, and the outside option
 
 For truck *i* and load *j*:
@@ -92,6 +92,11 @@ dispatcher correctly **decline**.
 Solved exactly — Jonker–Volgenant, via `scipy.optimize.linear_sum_assignment` —
 and checked against brute-force enumeration on small instances by an oracle that
 derives the matching **cardinality** itself rather than accepting the solver's.
+
+**And it declines.** On the demo instance `make dispatch` matches **38 of 40**
+trucks and prints the other two as *no backhaul worth taking*; across the sweep
+the policy leaves at least one truck deliberately unmatched on **29 of 30**
+instances.
 
 ---
 

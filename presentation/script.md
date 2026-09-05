@@ -98,6 +98,11 @@ it's checked against brute-force enumeration on small instances by an oracle
 that derives the matching cardinality itself instead of accepting whatever the
 solver returned.
 
+This is not theoretical. On the demo instance, make dispatch matches thirty-eight
+of forty trucks and prints the other two as no backhaul worth taking. Across the
+sweep it leaves at least one truck deliberately unmatched on twenty-nine of
+thirty instances.
+
 <!-- script: 6 -->
 Forty trucks, fifty loads, thirty seeded instances. Paired: every policy sees
 the identical instances under identical feasibility rules.

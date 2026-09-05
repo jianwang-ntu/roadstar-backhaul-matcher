@@ -30,21 +30,21 @@ ARTIFACTS
   verify_presentation.py    the check that can go red
   audit_scores_pinned.json  four audit figures, pinned for a clean-clone run
 
-  13 slides, 790 s of script = 13 min 10 s, inside the organiser's 10-15 minute
-  band with 110 s of headroom. 1,898 spoken words, every block between 135.3
-  and 157.6 words per minute (measured, not asserted).
+  13 slides, 800 s of script = 13 min 20 s, inside the organiser's 10-15 minute
+  band with 100 s of headroom. 1,939 spoken words, every block between 135.3
+  and 157.6 words per minute (measured below, not asserted).
 
 DIGESTS
-  slides.md                 ca4633640d37ff8b0d04cf3fbac1cfa278d6399e1fc052187e426b0fcbfd7db9
-  script.md                 d86ac2eceb1d476b3b95eadbfaa825faae12c7c12c122e99fc6952645ad8b24e
-  slides.html               d719f52ad5df1d25007d62433dbb2f6157335b185e7785cdae1d2c5ca921386e
+  slides.md                 b45d2bc1a41d32c06771cfb57a3382bbd732a3c7b0ff32595190714fd5e383b7
+  script.md                 97b67fd4aa36ddb2a174ba02ca01f264956fcdee60883f35bf54dc2e99dc97e0
+  slides.html               f0efe010db4c0203de3d09192a704e0d567bffff6d9e80a451daaf157d30ba50
   build_presentation.py     42ce5e027d449c997442eefced78bca0bb90466563f77d17a792f2ba3a264362
-  verify_presentation.py    8e19465418e64aad48ee141c95dccf2aee965cc62ed7a0756e4287402d058387
+  verify_presentation.py    90be8ee78f6686461928401a153b06c87633f7a05f7fc7ae6869b95fa845fd4b
   audit_scores_pinned.json  b3960fa227ffbf1270977183898e888f75c0bad6fc7ac718bc8ede0159a9e2a5
-  project git HEAD at build ee4da979c5c9e00077329f028156a73a7c3d321a
+  project git HEAD at build e406f68e80b64bde6cd0b79e9f1e758b6fb28add
 
 WHAT WAS VERIFIED, AND HOW IT CAN FAIL
-  `python3 verify_presentation.py` -- 58 figures, GREEN, plus 17 negative
+  `python3 verify_presentation.py` -- 60 figures, GREEN, plus 18 negative
   controls each of which must turn a NAMED check red.
 
   A. STRUCTURE  every slide declares seconds and criteria; slides and script
@@ -77,9 +77,10 @@ WHAT WAS VERIFIED, AND HOW IT CAN FAIL
                 from, and a mismatch is red. It also carries no remote resource,
                 and every checked figure must survive rendering.
 
-  Negative controls, all 17 firing the check they name:
+  Negative controls, all 18 firing the check they name:
     figure changed by one digit / audit score flattered / unsourced number
-    introduced / audit pin drifts from the report / reversal deleted / C4
+    introduced / audit pin drifts from the report / decline rate overstated /
+    reversal deleted / C4
     quietly upgraded / skew warning dropped / synthetic disclosure removed /
     open findings hushed / script drops the skew warning / script drops the
     reversal / video claimed as hosted / compliance asserted / slides.md edited
@@ -101,6 +102,36 @@ WHAT WAS VERIFIED, AND HOW IT CAN FAIL
   never reaching. It is now anchored on a figure that appears exactly once. The
   broken version is recorded rather than deleted, because a control that passes
   for the wrong reason is the failure this whole file exists to catch.
+
+WHAT THIS CLOSES, AND THE HALF THAT WAS ALREADY CLOSED WITHOUT ANYONE LOOKING
+  Round-2 audit finding RUBRIC-02 (BLOCKER) is two claims, not one:
+
+    (a) "No deck, no PDF, no slides, no screenshots, no demo script."
+    (b) "On the demo seed (1000) it reports '# matched 40 of 40 trucks', so the
+         demo never exercises the decline branch the README calls the flagship
+         policy's unique capability -- the one behaviour a 10-15 minute
+         presentation would be built around."
+
+  (a) is closed by this directory.
+
+  (b) was ALREADY FALSE before this tick, and nobody had re-measured it. The
+  round-2 revision that charged the shipper wait made the duty-day rule stricter,
+  which changed the matching. `make dispatch` on the demo seed now reports
+  "# matched 38 of 40 trucks" and prints two trucks as "-- (no backhaul worth
+  taking)". Measured this tick over the whole sweep: the entry leaves at least
+  one truck deliberately unmatched on 29 of 30 instances. The demo video's own
+  capture, demo/caps/dispatch.log lines 43-45, already showed those two declined
+  trucks on screen.
+
+  Slide 5 now carries both figures, resolved by a live run rather than read out
+  of a document, with a negative control ("decline rate overstated") that turns
+  the check red if 29 of 30 is inflated to 30 of 30.
+
+  NOT CLOSED by any of this: RUBRIC-01 (the video's absence) is recorded in
+  status.json as open even though the video now exists and is committed. This
+  tick did not re-adjudicate it -- it is a different row's finding, and closing
+  someone else's blocker in passing is how a list stops meaning anything. It is
+  flagged for whoever next opens that row.
 
 WHAT THIS DECK CLAIMS
   Nothing that is not in the repository. The headline it leads with is the

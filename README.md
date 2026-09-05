@@ -259,7 +259,7 @@ third of those passed all 52 tests — round-2 findings DOMAIN-02 and DOMAIN-03.
   to YouTube, Vimeo or any other video-hosting platform**, and **no entry has
   been filed anywhere**. Judging criterion 5 also asks for a 10–15 minute live
   presentation. The material for it is committed at `presentation/` — 13 slides
-  and a 13 min 10 s timed script — but **a deck is not a presentation**: this
+  and a 13 min 20 s timed script — but **a deck is not a presentation**: this
   entrant is in Singapore, the session is in person in Waterloo, and whether a
   remote entrant may present at all is unpublished. Criterion 5 stays
   **unmet**.

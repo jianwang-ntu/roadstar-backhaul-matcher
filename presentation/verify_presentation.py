@@ -209,6 +209,35 @@ class Sources:
         assert out.returncode == 0, out.stderr[-400:]
         return json.loads(out.stdout)["per_policy"][policy][field]
 
+    def declines(self) -> dict:
+        """The decline branch, measured rather than described.
+
+        Round-2 audit finding RUBRIC-02 (BLOCKER) said the demo never exercises
+        it: on seed 1000 the model then matched 40 of 40. The revision that
+        charged the shipper wait changed that, and this recomputes it rather
+        than trusting the finding or its rebuttal."""
+        code = r'''
+import json, sys
+sys.path.insert(0, ".")
+from roadstar.instance import make_instance
+from roadstar.policies import POLICIES
+demo_t, demo_m = None, None
+seeds_with_a_decline = 0
+for seed in range(1000, 1030):
+    trucks, loads = make_instance(40, 50, seed=seed)
+    sol = POLICIES["profit_assignment"](trucks, loads)
+    if seed == 1000:
+        demo_t, demo_m = len(trucks), len(sol.assignments)
+    if len(sol.assignments) < len(trucks):
+        seeds_with_a_decline += 1
+print(json.dumps({"demo_trucks": demo_t, "demo_matched": demo_m,
+                  "seeds_with_a_decline": seeds_with_a_decline, "seeds": 30}))
+'''
+        out = subprocess.run([sys.executable, "-c", code], cwd=self.project,
+                             capture_output=True, text=True, timeout=600)
+        assert out.returncode == 0, out.stderr[-600:]
+        return json.loads(out.stdout)
+
     def decomposition(self) -> dict:
         """Recomputed here, from the policies, exactly as
         tests/test_readme_matches_results.py recomputes it. Reading these five
@@ -329,6 +358,13 @@ def build_figures(S: Sources) -> list[tuple[str, str, str]]:
     add("55.6%", f"{d['denominator_share']:.1f}%", "recomputed denominator share")
     add("208.2", f"{d['len_base']:.1f}", "recomputed mean matched load length, baseline")
     add("242.2", f"{d['len_entry']:.1f}", "recomputed mean matched load length, entry")
+
+    # -- the decline branch, measured on the demo instance and the sweep -------
+    dec = S.declines()
+    add("38 of 40", f"{dec['demo_matched']} of {dec['demo_trucks']}",
+        "live run of profit_assignment on the demo seed 1000")
+    add("29 of 30", f"{dec['seeds_with_a_decline']} of {dec['seeds']}",
+        "live run: seeds leaving at least one truck deliberately unmatched")
 
     # -- hours of service ------------------------------------------------------
     tot0, ill0, pct0, worst0 = S.hos_row(0)
@@ -596,6 +632,7 @@ MUTATIONS = [
      "winning **30 of 30**.", "winning **30 of 30**, roughly 4.2x.", "D.no_unsourced"),
     ("audit pin drifts from the report", "audit_scores_pinned.json",
      '"overall": 37.28', '"overall": 67.28', "C.audit_pin_agrees[round1]"),
+    ("decline rate overstated", "slides.md", "**29 of 30**", "**30 of 30**", "C.present"),
     # -- honesty deleted from the slides -------------------------------------
     ("the reversal deleted", "slides.md",
      "**`profit_assignment` is not the best one**", "**`profit_assignment` wins here too**",
